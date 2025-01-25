@@ -1,0 +1,86 @@
+import dune from "../assets/dune.jpg";
+import dune2 from "../assets/dune2.jpeg";
+import fallout from "../assets/fallout.jpg";
+import fallout2 from "../assets/fallout2.jpg";
+import inside from "../assets/inside.jpg";
+import inside2 from "../assets/inside2.jpeg";
+
+// Video Data for trailers, thumbnails, and other details
+export const VideoData = [
+  {
+    id: 1,
+    thumbnail:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/bdbaad8f3a7835917c369726940882a610e8c74d5752d3928b1fa2bd40a95477?placeholderIfAbsent=true&apiKey=3953249e405f4f0f9fc1a18498c625c2",
+    poster:
+      "https://upload.wikimedia.org/wikipedia/en/7/76/Fallout_%282024_TV_series%29.jpg",
+    title: "Welcome to the Apocalypse!",
+    subtitle: "Watch the new \"Fallout\" Trailer",
+    duration: "3:18",
+    playIcon:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/b5623966370f8a13419d3bd9c6106bd5cd938834b64431ce46c38ddee00c095a?placeholderIfAbsent=true&apiKey=3953249e405f4f0f9fc1a18498c625c2",
+  },
+  {
+    id: 2,
+    thumbnail:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/c56c9c766d58999466858012cef2b32a4f9a8868157d1bf020c23d8194557d81?placeholderIfAbsent=true&apiKey=3953249e405f4f0f9fc1a18498c625c2",
+    poster: "https://upload.wikimedia.org/wikipedia/en/f/f7/Inside_Out_2_poster.jpg",
+    title: "'Inside Out 2' Make us Feel Every Emotion",
+    subtitle: "Watch the new \"Inside Out 2\" Trailer",
+    duration: "3:18",
+    playIcon:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/a236731649ff73e78d0c1de2431213995567da5fbab2fc6da869c842e98ba4a1?placeholderIfAbsent=true&apiKey=3953249e405f4f0f9fc1a18498c625c2",
+  },
+  {
+    id: 3,
+    thumbnail:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/fb260b4b7be05803548f9c35eaed86e258231605afd1a57ec2b16c5e91aab79c?placeholderIfAbsent=true&apiKey=3953249e405f4f0f9fc1a18498c625c2",
+    poster:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/2e91e48da63e11259b273518d1c998c5f7d0efe921e3abf2e1a77cad9b20be2f?placeholderIfAbsent=true&apiKey=3953249e405f4f0f9fc1a18498c625c2",
+    title: "Where Might 'Dune' Go Next?",
+    subtitle: "Our 'Dune: Part Three' Theories",
+    duration: "3:18",
+    playIcon:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/594adf582d79810aed749deabd13b2b8c545088331b5446fb8225c5eb9fb1776?placeholderIfAbsent=true&apiKey=3953249e405f4f0f9fc1a18498c625c2",
+  },
+];
+
+// Featured Videos for the main section
+export const FeaturedMovies = [
+  {
+    id: 1,
+    title: "Where might 'Dune' go next?",
+    image: dune, 
+  },
+  {
+    id: 2,
+    title: "Inside Out 2",
+    image: inside, 
+    
+  },
+  {
+    id: 3,
+    title: "Fallout",
+    image: fallout2, 
+  },
+];
+
+export const FeaturedMovieCard = [
+  {
+    id: 1,
+    title: "Where might 'Dune' go next?",
+    subtitle: "Our 'Dune: Part Three' Theories",
+    image: dune2,
+  },
+  {
+    id: 2,
+    title: "Inside Out 2",
+    subtitle: "Watch the new \"Inside Out 2\" Trailer",
+    image: inside2,
+  },
+  {
+    id: 3,
+    title: "Fallout",
+    subtitle: "Watch the new \"Fallout\" Trailer",
+    image: fallout,
+  }
+]
