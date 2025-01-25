@@ -1,24 +1,24 @@
 import PropTypes from "prop-types"
+import { PlayCircle } from "lucide-react" // Example of using Lucide icons
 
 const FeaturedMovieCard = ({ video }) => {
   if (!video) return null
 
   return (
-    <div className="text-white p-4">
-      <div className="flex items-start gap-4">
+    <div className="text-white  p-4">
+      <div className="flex items-end gap-4">
         {/* Image or Poster */}
-        <img src={video.image || video.poster} alt={video.title} className="w-24 h-36 object-cover rounded-md" />
+        <img src={video.image || video.poster} alt={video.title} className="w-60 h-80 object-cover rounded-md" />
+
+        {/* Icon */}
+        <div className="flex items-center justify-center">
+          <PlayCircle className="text-white-500 w-24 h-24" />
+        </div>
 
         {/* Video Details */}
         <div className="flex-1">
           <h2 className="text-lg font-bold mb-2">{video.title}</h2>
           <p className="text-sm text-gray-400 mb-4">{video.subtitle || "No subtitle available"}</p>
-          <button
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
-            aria-label={`Watch ${video.title}`}
-          >
-            Watch Now
-          </button>
         </div>
       </div>
     </div>

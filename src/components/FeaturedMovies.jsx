@@ -27,13 +27,13 @@ const FeaturedMovies = () => {
     <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen p-8">
       <div className="flex gap-5 max-md:flex-col">
         {/* Featured Video Section */}
-        <div className="relative flex flex-col w-[74%] max-md:ml-0 max-md:w-full">
+        <div className="relative flex flex-col w-[74%] max-md:w-full">
           <div className="relative group cursor-pointer overflow-hidden rounded-xl">
             <img
               loading="lazy"
               src={currentFeaturedVideo.image || "/placeholder.svg"}
               alt={currentFeaturedVideo.title}
-              className="object-contain grow mt-1.5 w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300 group-hover:scale-105"
+              className="object-contain grow mt-1.5 w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300"
             />
           </div>
 
