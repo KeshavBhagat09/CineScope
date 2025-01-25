@@ -37,5 +37,3 @@ FeaturedMovieCard.propTypes = {
 }
 
 export default FeaturedMovieCard
-
-//test1
