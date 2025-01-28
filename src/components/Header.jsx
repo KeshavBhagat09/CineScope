@@ -54,9 +54,6 @@ export const Header = () => {
             <a href="#tvshows" className="self-stretch px-2.5 py-2 my-auto">
               TV Shows
             </a>
-            <a href="#watch" className="self-stretch px-2.5 py-2 my-auto whitespace-nowrap">
-              Watch
-            </a>
             <a href="#awards" className="self-stretch px-2.5 py-2 my-auto whitespace-nowrap">
               Awards
             </a>
