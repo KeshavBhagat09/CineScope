@@ -8,7 +8,7 @@ import { FeaturedMovieCard as FeaturedMovieCardData } from "./VideoData";
 const FeaturedMovies = () => {
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
   const [backgroundGradient, setBackgroundGradient] = useState(
-    "linear-gradient(to bottom, #1a1a1a, #000)" // Default fallback gradient
+    "linear-gradient(to bottom, #1a1a1a, #000)"
   );
 
   useEffect(() => {
@@ -23,38 +23,33 @@ const FeaturedMovies = () => {
     const extractColorFromImage = (imageSrc) => {
       return new Promise((resolve, reject) => {
         const img = new Image();
-        img.crossOrigin = "Anonymous"; // Allow cross-origin images
+        img.crossOrigin = "Anonymous";
         img.src = imageSrc;
 
         img.onload = () => {
           const canvas = document.createElement("canvas");
           const ctx = canvas.getContext("2d");
 
-          // Set canvas size to image size
           canvas.width = img.width;
           canvas.height = img.height;
           ctx.drawImage(img, 0, 0, img.width, img.height);
 
-          // Get pixel data
           const imageData = ctx.getImageData(0, 0, img.width, img.height);
           const pixels = imageData.data;
 
           let r = 0, g = 0, b = 0, count = 0;
 
-          // Loop through every 4th pixel (R, G, B, A)
-          for (let i = 0; i < pixels.length; i += 4 * 100) { // Skip some pixels for performance
-            r += pixels[i];     // Red
-            g += pixels[i + 1]; // Green
-            b += pixels[i + 2]; // Blue
+          for (let i = 0; i < pixels.length; i += 4 * 100) {
+            r += pixels[i];
+            g += pixels[i + 1];
+            b += pixels[i + 2];
             count++;
           }
 
-          // Get the average RGB values
           r = Math.floor(r / count);
           g = Math.floor(g / count);
           b = Math.floor(b / count);
 
-          // Convert to hex
           const hexColor = `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
 
           resolve(hexColor);
@@ -65,18 +60,14 @@ const FeaturedMovies = () => {
     };
 
     const updateGradient = async () => {
-      if (!FeaturedData[currentFeaturedIndex]?.image) {
-        console.warn("No image found for the featured video.");
-        return;
-      }
+      if (!FeaturedData[currentFeaturedIndex]?.image) return;
 
       try {
         const dominantColor = await extractColorFromImage(FeaturedData[currentFeaturedIndex].image);
-        const newGradient = `linear-gradient(to bottom, ${dominantColor}, #000)`;
-        setBackgroundGradient(newGradient);
+        setBackgroundGradient(`linear-gradient(to bottom, ${dominantColor}, #000)`);
       } catch (error) {
         console.error("Error extracting color:", error);
-        setBackgroundGradient("linear-gradient(to bottom, #1a1a1a, #000)"); // Fallback gradient
+        setBackgroundGradient("linear-gradient(to bottom, #1a1a1a, #000)");
       }
     };
 
@@ -89,13 +80,18 @@ const FeaturedMovies = () => {
 
   const currentFeaturedVideo = FeaturedData[currentFeaturedIndex];
 
-  return (
-    <div
-      className="min-h-screen p-8 transition-all duration-500"
-      style={{ background: backgroundGradient }}
-    >
-      <h1 className="text-white text-xl mb-4">Featured Movie: {currentFeaturedVideo.title}</h1>
+  const handleNext = () => {
+    setCurrentFeaturedIndex((prevIndex) => (prevIndex + 1) % FeaturedData.length);
+  };
 
+  const handlePrev = () => {
+    setCurrentFeaturedIndex(
+      (prevIndex) => (prevIndex - 1 + FeaturedData.length) % FeaturedData.length
+    );
+  };
+
+  return (
+    <div className="min-h-screen p-8 transition-all duration-500 relative" style={{ background: backgroundGradient }}>
       <div className="flex gap-5 max-md:flex-col">
         <div className="relative flex flex-col w-[74%] max-md:w-full">
           <div className="relative group cursor-pointer overflow-hidden rounded-xl">
@@ -106,6 +102,20 @@ const FeaturedMovies = () => {
               className="object-contain grow mt-1.5 w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300"
             />
           </div>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={handlePrev}
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all"
+          >
+            ❮
+          </button>
+          <button
+            onClick={handleNext}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all"
+          >
+            ❯
+          </button>
 
           <div className="absolute bottom-5 left-5">
             <FeaturedMovieCard video={FeaturedMovieCardData[currentFeaturedIndex]} />
