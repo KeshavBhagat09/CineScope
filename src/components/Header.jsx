@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion"; // Import Framer Motion
 import Logo from "../assets/logo.png";
 import Watchlist from "../assets/watchlist.svg";
 
@@ -48,15 +49,30 @@ export const Header = () => {
 
           {/* Navigation Links (Desktop View) */}
           <nav className="hidden md:flex justify-center items-center self-stretch my-auto text-base min-w-[240px] text-stone-300 max-md:max-w-full">
-            <a href="#movies" className="self-stretch px-2.5 py-2 my-auto whitespace-nowrap">
+            <motion.a
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              href="#movies"
+              className="self-stretch px-2.5 py-2 my-auto whitespace-nowrap transition-all duration-300 hover:text-yellow-400"
+            >
               Movies
-            </a>
-            <a href="#tvshows" className="self-stretch px-2.5 py-2 my-auto">
+            </motion.a>
+            <motion.a
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              href="#tvshows"
+              className="self-stretch px-2.5 py-2 my-auto transition-all duration-300 hover:text-yellow-400"
+            >
               TV Shows
-            </a>
-            <a href="#awards" className="self-stretch px-2.5 py-2 my-auto whitespace-nowrap">
+            </motion.a>
+            <motion.a
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              href="#awards"
+              className="self-stretch px-2.5 py-2 my-auto whitespace-nowrap transition-all duration-300 hover:text-yellow-400"
+            >
               Awards
-            </a>
+            </motion.a>
           </nav>
 
           {/* Search Bar */}
@@ -64,7 +80,7 @@ export const Header = () => {
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/6a74799e828d2ec913cd21ac7ffd37a63dbb9165e09b014e5594e15e6573d84f?placeholderIfAbsent=true&apiKey=3a9eed2ab9b94807b0368b782b883ee2"
-              alt=""
+              alt="Search Icon"
               className="object-contain shrink-0 bg-blend-normal aspect-square w-[15px]"
             />
             <input
@@ -75,9 +91,11 @@ export const Header = () => {
             />
           </form>
 
-          {/* Watchlist Button */}
-          <button
-            className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-colors duration-200"
+          {/* Watchlist Button with Animation */}
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-all duration-300 hover:bg-white/20"
             aria-label="Watchlist"
           >
             <img
@@ -86,21 +104,28 @@ export const Header = () => {
               className="w-5 h-5 filter invert"
             />
             Watchlist
-          </button>
+          </motion.button>
 
-          {/* Sign In Button */}
-          <button
-            className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-colors duration-200"
-            aria-label="Sign In"
+          {/* Log In Button with Animation */}
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-all duration-300 hover:bg-white/20"
+            aria-label="Log In"
           >
-            <span>Sign In</span>
-          </button>
+            <span>Log in</span>
+          </motion.button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="flex flex-col bg-zinc-900 text-stone-300 md:hidden">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="flex flex-col bg-zinc-900 text-stone-300 md:hidden"
+        >
           <a href="#movies" className="px-4 py-2 border-b border-zinc-800">
             Movies
           </a>
@@ -119,7 +144,7 @@ export const Header = () => {
           <a href="#community" className="px-4 py-2 border-b border-zinc-800">
             Community
           </a>
-        </div>
+        </motion.div>
       )}
     </div>
   );

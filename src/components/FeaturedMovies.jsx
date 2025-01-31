@@ -117,7 +117,7 @@ const FeaturedMovies = () => {
             ❯
           </button>
 
-          <div className="absolute bottom-5 left-5">
+          <div className="absolute bottom-5 left-5">  
             <FeaturedMovieCard video={FeaturedMovieCardData[currentFeaturedIndex]} />
           </div>
         </div>
