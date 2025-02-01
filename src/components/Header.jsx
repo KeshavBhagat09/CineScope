@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
 import Logo from "../assets/logo.png";
 import Watchlist from "../assets/watchlist.svg";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom"; // Import Link for navigation
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,15 +16,15 @@ export const Header = () => {
       {/* Top Header Section */}
       <div className="flex flex-col justify-center items-center px-16 py-4 w-full bg-zinc-950 max-md:px-5 max-md:max-w-full">
         <div className="flex flex-wrap gap-2 justify-between items-center w-full max-w-[1442px] min-h-[39px] max-md:max-w-full">
-          {/* Logo */}
-          <a href="#home" className="shrink-0">
+          {/* Logo - Wrap with Link for navigation */}
+          <Link to="/" className="shrink-0">
             <img
               loading="lazy"
               src={Logo}
               alt="CineScope logo"
               className="object-contain self-stretch my-auto aspect-[1.97] w-[61px]"
             />
-          </a>
+          </Link>
 
           {/* Hamburger Menu Button (Mobile Only) */}
           <button
@@ -109,14 +109,14 @@ export const Header = () => {
 
           {/* Log In Button with Animation */}
           <Link to="/login">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-all duration-300 hover:bg-white/20"
-            aria-label="Log In"
-          >
-            <span>Log in</span>
-          </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-all duration-300 hover:bg-white/20"
+              aria-label="Log In"
+            >
+              <span>Log in</span>
+            </motion.button>
           </Link>
         </div>
       </div>

@@ -1,9 +1,17 @@
+import { image, title } from "framer-motion/client";
 import dune from "../assets/dune.jpg";
 import dune2 from "../assets/dune2.jpeg";
 import fallout from "../assets/fallout.jpg";
 import fallout2 from "../assets/fallout2.jpg";
 import inside from "../assets/inside.jpg";
 import inside2 from "../assets/inside2.jpeg";
+import BreakingBad from "../assets/BreakingBad.jpg";
+import BreakingBad2 from "../assets/BreakingBad2.jpg";
+import GameOfThrones from "../assets/GameOfThrones.jpg";
+import GameOfThrones2 from "../assets/GameOfThrones2.jpg";
+import PeakyBlinders from "../assets/PeakyBlinders.jpg";
+import PeakyBlinders2 from "../assets/PeakyBlinders2.jpg";
+import { Subtitles } from "lucide-react";
 
 // Video Data for trailers, thumbnails, and other details
 export const VideoData = [
@@ -62,6 +70,21 @@ export const FeaturedMovies = [
     title: "Fallout",
     image: fallout2, 
   },
+  {
+    id: 4,
+    title: "Breaking Bad",
+    image: BreakingBad,
+  },
+  {
+    id: 5,
+    title: "Game of Thrones",
+    image: GameOfThrones,
+  },
+  {
+    id: 6,
+    title: "Peaky Blinders",
+    image: PeakyBlinders,
+  },
 ];
 
 export const FeaturedMovieCard = [
@@ -82,5 +105,23 @@ export const FeaturedMovieCard = [
     title: "Fallout",
     subtitle: "Watch the new \"Fallout\" Trailer",
     image: fallout,
-  }
+  },
+  {
+    id: 4,
+    title: "Breaking Bad",
+    subtitle: "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student to secure his family's future.",
+    image: BreakingBad2,
+  },
+  {
+    id: 5,
+    title: "Game of Thrones",
+    subtitle: "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.",
+    image: GameOfThrones2,
+  },
+  {
+    id: 6,
+    title: "Peaky Blinders",
+    subtitle: "A gangster family epic set in 1919 Birmingham, England; centered on a gang who sew razor blades in the peaks of their caps, and their fierce boss Tommy Shelby.",
+    image: PeakyBlinders2,
+  },
 ]
