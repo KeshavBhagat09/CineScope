@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
 import Logo from "../assets/logo.png";
 import Watchlist from "../assets/watchlist.svg";
+import { Link } from "react-router-dom"
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -107,6 +108,7 @@ export const Header = () => {
           </motion.button>
 
           {/* Log In Button with Animation */}
+          <Link to="/login">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
@@ -115,6 +117,7 @@ export const Header = () => {
           >
             <span>Log in</span>
           </motion.button>
+          </Link>
         </div>
       </div>
 

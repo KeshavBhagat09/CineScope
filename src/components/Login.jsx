@@ -1,6 +1,6 @@
 const Login = () => {
     return (
-      <div className="text-white text-3xl flex justify-center items-center h-screen">
+      <div className=" text-3xl flex justify-center items-center h-screen">
         Hello World
       </div>
     );
