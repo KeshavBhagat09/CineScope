@@ -22,7 +22,7 @@ const Login = () => {
         const nextIndex = (currentIndex + 1) % images.length;
         return images[nextIndex];
       });
-    }, 10000); // image changing time 
+    }, 5000); // image changing time
 
     return () => clearInterval(interval);
   }, []);
@@ -43,18 +43,22 @@ const Login = () => {
   };
 
   return (
-    <div 
+    <div
       className="flex justify-center items-center min-h-screen bg-cover bg-center relative transition-all duration-1000"
       style={{ backgroundImage: `url(${currentImage})` }} // Auto-changing background
     >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-md"></div>
 
       <div className="w-full max-w-md p-8 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg relative">
-        <h2 className="text-3xl font-semibold text-center text-white mb-6">Login</h2>
-        
+        <h2 className="text-3xl font-semibold text-center text-white mb-6">
+          Login
+        </h2>
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-white">Username</label>
+            <label className="block text-sm font-medium text-white">
+              Username
+            </label>
             <input
               type="text"
               placeholder="Enter your username"
@@ -65,7 +69,9 @@ const Login = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-white">Password</label>
+            <label className="block text-sm font-medium text-white">
+              Password
+            </label>
             <input
               type="password"
               placeholder="Enter your password"
@@ -81,7 +87,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300"
+            className="w-full py-3 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300"
           >
             Login
           </button>
@@ -90,7 +96,10 @@ const Login = () => {
         <div className="mt-6 text-center">
           <p className="text-sm text-white">
             Don't have an account?{" "}
-            <button onClick={handleRegister} className="text-blue-400 hover:underline">
+            <button
+              onClick={handleRegister}
+              className="text-blue-400 hover:underline"
+            >
               Register
             </button>
           </p>

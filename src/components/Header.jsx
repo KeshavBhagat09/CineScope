@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
-import Logo from "../assets/logo.png";
+// import Logo from "../assets/logo.png";
+import Logo2 from "../assets/Logo2.png";
 import Watchlist from "../assets/watchlist.svg";
 import { Link } from "react-router-dom"; // Import Link for navigation
 
@@ -17,12 +18,12 @@ export const Header = () => {
       <div className="flex flex-col justify-center items-center px-16 py-4 w-full bg-zinc-950 max-md:px-5 max-md:max-w-full">
         <div className="flex flex-wrap gap-2 justify-between items-center w-full max-w-[1442px] min-h-[39px] max-md:max-w-full">
           {/* Logo - Wrap with Link for navigation */}
-          <Link to="/" className="shrink-0">
+          <Link to="/" className="shrink-0 mr-4">
             <img
               loading="lazy"
-              src={Logo}
+              src={Logo2}
               alt="CineScope logo"
-              className="object-contain self-stretch my-auto aspect-[1.97] w-[61px]"
+              className="object-contain self-stretch my-auto aspect-[1.97] w-[100px]"
             />
           </Link>
 

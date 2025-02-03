@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, useLocation } from "react-router-dom";
 import FeaturedMovies from "../components/FeaturedMovies.jsx";
 import PropTypes from "prop-types";
 import { Header } from "../components/Header.jsx";
@@ -6,12 +6,16 @@ import { Footer } from "../components/Footer.jsx";
 import Login from "../components/Login.jsx";
 import Register from "../components/Register.jsx";
 
-const Page_Component = ({ children, hideFooter }) => {
+const Page_Component = ({ children }) => {
+  const location = useLocation(); // Get current route path
+  const hideLayoutRoutes = ["/login", "/register"]; // Pages where header & footer should be hidden
+  const shouldShowLayout = !hideLayoutRoutes.includes(location.pathname);
+
   return (
     <div>
-      <Header />
+      {shouldShowLayout && <Header />} {/* Show Header only if not on login/register */}
       <div>{children}</div>
-      {!hideFooter && <Footer />} {/* Hide Footer when hideFooter is true */}
+      {shouldShowLayout && <Footer />} {/* Show Footer only if not on login/register */}
     </div>
   );
 };
@@ -29,27 +33,17 @@ const router = createBrowserRouter(
       />
       <Route
         path="/login"
-        element={
-          <Page_Component hideFooter={true}>
-            <Login />
-          </Page_Component>
-        }
-      />
+        element={<Login />} /> {/* No Page_Component to exclude Header & Footer */}
       <Route
         path="/register"
-        element={
-          <Page_Component hideFooter={true}>
-            <Register />
-          </Page_Component>
-        }
-      />
+        element={<Register />} /> {/* No Page_Component to exclude Header & Footer */}
     </>
   )
 );
 
 Page_Component.propTypes = {
   children: PropTypes.node,
-  hideFooter: PropTypes.bool, // Prop validation for hiding footer
 };
 
 export default router;
+  
