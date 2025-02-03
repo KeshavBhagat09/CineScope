@@ -1,31 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BreakingBad from "../assets/BreakingBad.jpg";
-import PeakyBlinders from "../assets/PeakyBlinders.jpg";
-import GameOfThrones from "../assets/GameOfThrones.jpg";
-import Spider from "../assets/Spider.jpg";
-
-const images = [BreakingBad, PeakyBlinders, GameOfThrones, Spider]; // Array of images
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [currentImage, setCurrentImage] = useState(images[0]);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prevImage) => {
-        const currentIndex = images.indexOf(prevImage);
-        const nextIndex = (currentIndex + 1) % images.length;
-        return images[nextIndex];
-      });
-    }, 5000); // image changing time
-
-    return () => clearInterval(interval);
-  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,12 +26,12 @@ const Login = () => {
 
   return (
     <div
-      className="flex justify-center items-center min-h-screen bg-cover bg-center relative transition-all duration-1000"
-      style={{ backgroundImage: `url(${currentImage})` }} // Auto-changing background
+      className="flex justify-center items-center min-h-screen bg-cover bg-center relative"
+      style={{ backgroundImage: `url(${BreakingBad})` }}
     >
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-md"></div>
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
 
-      <div className="w-full max-w-md p-8 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg relative">
+      <div className="w-full max-w-md p-8 bg-white/10 backdrop-blur-sm rounded-xl shadow-lg relative">
         <h2 className="text-3xl font-semibold text-center text-white mb-6">
           Login
         </h2>
