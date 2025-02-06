@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
 // import Logo from "../assets/logo.png";
-import Logo2 from "../assets/Logo2.png";
+import Logo from "../assets/Logo.png";
 import Watchlist from "../assets/watchlist.svg";
 import { Link } from "react-router-dom"; // Import Link for navigation
 
@@ -21,9 +21,9 @@ export const Header = () => {
           <Link to="/" className="shrink-0 mr-4">
             <img
               loading="lazy"
-              src={Logo2}
+              src={Logo}
               alt="CineScope logo"
-              className="object-contain self-stretch my-auto aspect-[1.97] w-[100px]"
+              className="object-contain self-stretch my-auto aspect-[1.97] w-[150px]"
             />
           </Link>
 

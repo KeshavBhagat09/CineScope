@@ -99,7 +99,7 @@ const FeaturedMovies = () => {
               loading="lazy"
               src={currentFeaturedVideo.image || "/placeholder.svg"}
               alt={currentFeaturedVideo.title}
-              className="object-contain grow mt-1.5 w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300"
+              className="object-contain grow  w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300 -mt-9"
             />
           </div>
 
