@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { createBrowserRouter, createRoutesFromElements, Route, useLocation, Outlet } from "react-router-dom";
-import FeaturedMovies from "../components/FeaturedMovies.jsx";
+import FeaturedMovies from "../components/Featured/FeaturedMovies.jsx";
 import PropTypes from "prop-types";
-import { Header } from "../components/Header.jsx";
-import { Footer } from "../components/Footer.jsx";
-import Login from "../components/Login.jsx";
-import Register from "../components/Register.jsx";
-import Loader from "../components/Loader.jsx";
+import { Header } from "../components/Navbar/Header.jsx";
+import { Footer } from "../components/Navbar/Footer.jsx";
+import Login from "../components/Auth/Login.jsx";
+import Register from "../components/Auth/Register.jsx";
+import Loader from "../components/UI/Loader.jsx";
 
 // Page_Component handles the layout and loading state
 const Page_Component = ({ children }) => {

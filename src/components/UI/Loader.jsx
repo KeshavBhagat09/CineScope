@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Logo from '../assets/Logo.png'; // Make sure this path is correct
+import Logo from '../../assets/Logo.png'; // Make sure this path is correct
 
 const Loader = () => {
   const [loading, setLoading] = useState(true);

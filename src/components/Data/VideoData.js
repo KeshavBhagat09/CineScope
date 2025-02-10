@@ -1,16 +1,16 @@
 import { image, title } from "framer-motion/client";
-import dune from "../assets/dune.jpg";
-import dune2 from "../assets/dune2.jpeg";
-import fallout from "../assets/fallout.jpg";
-import fallout2 from "../assets/fallout2.jpg";
-import inside from "../assets/inside.jpg";
-import inside2 from "../assets/inside2.jpeg";
-import BreakingBad from "../assets/BreakingBad.jpg";
-import BreakingBad2 from "../assets/BreakingBad2.jpg";
-import GameOfThrones from "../assets/GameOfThrones.jpg";
-import GameOfThrones2 from "../assets/GameOfThrones2.jpg";
-import PeakyBlinders from "../assets/PeakyBlinders.jpg";
-import PeakyBlinders2 from "../assets/PeakyBlinders2.jpg";
+import dune from "../../assets/dune.jpg";
+import dune2 from "../../assets/dune2.jpeg";
+import fallout from "../../assets/fallout.jpg";
+import fallout2 from "../../assets/fallout2.jpg";
+import inside from "../../assets/inside.jpg";
+import inside2 from "../../assets/inside2.jpeg";
+import BreakingBad from "../../assets/BreakingBad.jpg";
+import BreakingBad2 from "../../assets/BreakingBad2.jpg";
+import GameOfThrones from "../../assets/GameOfThrones.jpg";
+import GameOfThrones2 from "../../assets/GameOfThrones2.jpg";
+import PeakyBlinders from "../../assets/PeakyBlinders.jpg";
+import PeakyBlinders2 from "../../assets/PeakyBlinders2.jpg";
 
 // Video Data for trailers, thumbnails, and other details
 export const VideoData = [

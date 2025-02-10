@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import VideoCard from "./VideoCard";
-import { FeaturedMovies as FeaturedData } from "./VideoData";
-import { VideoData } from "./VideoData";
+import { FeaturedMovies as FeaturedData } from "../Data/VideoData";
+import { VideoData } from "../Data/VideoData";
 import FeaturedMovieCard from "./FeaturedMovieCard";
-import { FeaturedMovieCard as FeaturedMovieCardData } from "./VideoData";
+import { FeaturedMovieCard as FeaturedMovieCardData } from "../Data/VideoData";
 
 const FeaturedMovies = () => {
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);

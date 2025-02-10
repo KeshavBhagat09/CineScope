@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BreakingBad from "../assets/BreakingBad.jpg";
+import BreakingBad from "../../assets/BreakingBad.jpg";
 
 const Login = () => {
   const [username, setUsername] = useState("");
