@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
 // import Logo from "../assets/logo.png";
 import Logo from "../assets/Logo.png";
-import Watchlist from "../assets/watchlist.svg";
+import Watchlist from "../assets/Watchlist.svg";
 import { Link } from "react-router-dom"; // Import Link for navigation
 
 export const Header = () => {
@@ -65,7 +65,7 @@ export const Header = () => {
               href="#tvshows"
               className="self-stretch px-2.5 py-2 my-auto transition-all duration-300 hover:text-yellow-400"
             >
-              TV Shows
+              Shows
             </motion.a>
             <motion.a
               whileHover={{ scale: 1.1 }}
