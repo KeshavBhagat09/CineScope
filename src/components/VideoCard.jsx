@@ -8,7 +8,7 @@ function VideoCard({ thumbnail, poster, title, subtitle, duration, playIcon }) {
       role="button"
       aria-label={`Play ${title}`}
     >
-      <div className="flex relative flex-col gap-4 px-4 py-6 aspect-[2.027] bg-gradient-to-r from-gray-800/80 to-gray-900/80 backdrop-blur-sm hover:from-gray-800/90 hover:to-gray-900/90 transition-all duration-300">
+      <div className="flex relative flex-col gap-4 px-4 py-4 aspect-[2.027] bg-gradient-to-r from-gray-800/80 to-gray-900/80 backdrop-blur-sm hover:from-gray-800/90 hover:to-gray-900/90 transition-all duration-300">
         <img
           loading="lazy"
           src={thumbnail}
@@ -20,7 +20,7 @@ function VideoCard({ thumbnail, poster, title, subtitle, duration, playIcon }) {
           loading="lazy"
           src={poster}
           alt={title}
-          className="relative z-10 object-contain shrink-0 rounded-md aspect-[0.66] w-[93px] shadow-lg transform group-hover:translate-y-[-2px] transition-transform duration-300"
+          className="relative z-10 object-contain shrink-0 rounded-md aspect-[0.66] w-[30px] shadow-lg transform group-hover:translate-y-[-2px] transition-transform duration-300"
         />
         <div className="flex relative z-10 flex-col text-stone-300">
           <div className="text-lg font-medium group-hover:text-white transition-colors duration-200">
