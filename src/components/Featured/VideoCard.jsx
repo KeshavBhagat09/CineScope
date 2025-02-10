@@ -20,7 +20,7 @@ function VideoCard({ thumbnail, poster, title, subtitle, duration, playIcon }) {
           loading="lazy"
           src={poster}
           alt={title}
-          className="relative z-10 object-contain shrink-0 rounded-md aspect-[0.66] w-[30px] shadow-lg transform group-hover:translate-y-[-2px] transition-transform duration-300"
+          className="relative z-10 object-contain shrink-0 rounded-md aspect-[0.66] w-[40px] shadow-lg transform group-hover:translate-y-[-2px] transition-transform duration-300"
         />
         <div className="flex relative z-10 flex-col text-stone-300">
           <div className="text-lg font-medium group-hover:text-white transition-colors duration-200">

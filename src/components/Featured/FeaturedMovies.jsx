@@ -4,6 +4,9 @@ import { FeaturedMovies as FeaturedData } from "../Data/VideoData";
 import { VideoData } from "../Data/VideoData";
 import FeaturedMovieCard from "./FeaturedMovieCard";
 import { FeaturedMovieCard as FeaturedMovieCardData } from "../Data/VideoData";
+import TopPicks from "../TopPicks/TopPicks";
+import TopPicksHeader from "../TopPicks/TopPicksHeader";
+import TopPicksIcon from "../TopPicks/TopPicksIcon";
 
 const FeaturedMovies = () => {
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
@@ -148,6 +151,10 @@ const FeaturedMovies = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="mt-12">
+        <TopPicks />
+        <TopPicksIcon/>
       </div>
     </div>
   );

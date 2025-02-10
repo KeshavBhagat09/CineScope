@@ -3,10 +3,13 @@ import { createBrowserRouter, createRoutesFromElements, Route, useLocation, Outl
 import FeaturedMovies from "../components/Featured/FeaturedMovies.jsx";
 import PropTypes from "prop-types";
 import { Header } from "../components/Navbar/Header.jsx";
-import { Footer } from "../components/Navbar/Footer.jsx";
+import { Footer } from "../components/UI/Footer.jsx";
 import Login from "../components/Auth/Login.jsx";
 import Register from "../components/Auth/Register.jsx";
 import Loader from "../components/UI/Loader.jsx";
+import TopPicks from '../components/TopPicks/TopPicks.jsx';
+import TopPicksHeader from '../components/TopPicks/TopPicksHeader.jsx';
+import TopPicksIcon from '../components/TopPicks/TopPicksIcon.jsx';
 
 // Page_Component handles the layout and loading state
 const Page_Component = ({ children }) => {
