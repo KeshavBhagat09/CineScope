@@ -11,6 +11,12 @@ import GameOfThrones from "../../assets/GameOfThrones.jpg";
 import GameOfThrones2 from "../../assets/GameOfThrones2.jpg";
 import PeakyBlinders from "../../assets/PeakyBlinders.jpg";
 import PeakyBlinders2 from "../../assets/PeakyBlinders2.jpg";
+import StarWars from "../../assets/StarWars.jpeg";
+import Inception from "../../assets/Inception.jpeg";
+import DarkKnight from "../../assets/DarkKnight.jpeg";
+import SpiderMan from "../../assets/SpiderMan.jpeg";
+import Interstellar from "../../assets/Interstellar.jpeg";  
+import LordOfTheRings from "../../assets/LordOfTheRings.jpeg";
 
 // Video Data for trailers, thumbnails, and other details
 export const VideoData = [
@@ -125,3 +131,44 @@ export const FeaturedMovieCard = [
     image: PeakyBlinders2,
   },
 ];
+
+const TopPicksCard = [
+  {
+    title: "Star Wars: Episode V - The Empire Strikes",
+    posterSrc:
+    StarWars,
+    rating: 8.7,
+  },
+  {
+    title: "Inception",
+    posterSrc:
+    Inception,
+    rating: 8.8,
+  },
+  {
+    title: "The Dark Knight",
+    posterSrc:
+      DarkKnight,
+    rating: 9.0,
+  },
+  {
+    title: "The Dark Knight",
+    posterSrc:
+      SpiderMan,
+    rating: 9.0,
+  },
+  {
+    title: "The Dark Knight",
+    posterSrc:
+      Interstellar,
+    rating: 9.0,
+  },
+  {
+    title: "The Dark Knight",
+    posterSrc:
+      LordOfTheRings,
+    rating: 9.0,
+  },
+];
+
+export default TopPicksCard;
