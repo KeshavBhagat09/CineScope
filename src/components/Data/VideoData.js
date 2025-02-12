@@ -152,19 +152,19 @@ const TopPicksCard = [
     rating: 9.0,
   },
   {
-    title: "The Dark Knight",
+    title: "Spider Man Across Spider Verse",
     posterSrc:
       SpiderMan,
     rating: 9.0,
   },
   {
-    title: "The Dark Knight",
+    title: "Interstellar",
     posterSrc:
       Interstellar,
     rating: 9.0,
   },
   {
-    title: "The Dark Knight",
+    title: "The Lord Of The Rings",
     posterSrc:
       LordOfTheRings,
     rating: 9.0,
