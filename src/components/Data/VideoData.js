@@ -11,7 +11,7 @@ import GameOfThrones from "../../assets/GameOfThrones.jpg";
 import GameOfThrones2 from "../../assets/GameOfThrones2.jpg";
 import PeakyBlinders from "../../assets/PeakyBlinders.jpg";
 import PeakyBlinders2 from "../../assets/PeakyBlinders2.jpg";
-import StarWars from "../../assets/StarWars.jpeg";
+import SocialNetwork from "../../assets/SocialNetwork.jpeg";
 import Inception from "../../assets/Inception.jpeg";
 import DarkKnight from "../../assets/DarkKnight.jpeg";
 import SpiderMan from "../../assets/SpiderMan.jpeg";
@@ -137,9 +137,9 @@ export const FeaturedMovieCard = [
 
 const TopPicksCard = [
   {
-    title: "Star Wars: Episode V - The Empire Strikes",
+    title: "The Social Network",
     posterSrc:
-    StarWars,
+    SocialNetwork,
     rating: 8.7,
   },
   {
