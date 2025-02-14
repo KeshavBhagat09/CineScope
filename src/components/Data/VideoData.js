@@ -17,6 +17,9 @@ import DarkKnight from "../../assets/DarkKnight.jpeg";
 import SpiderMan from "../../assets/SpiderMan.jpeg";
 import Interstellar from "../../assets/Interstellar.jpeg";  
 import LordOfTheRings from "../../assets/LordOfTheRings.jpeg";
+import Dark from "../../assets/Dark.jpeg"
+import Harry from "../../assets/Harry.jpeg"
+import Endgame from "../../assets/Endgame.jpeg"
 
 // Video Data for trailers, thumbnails, and other details
 export const VideoData = [
@@ -170,42 +173,41 @@ const TopPicksCard = [
     rating: 9.0,
   },
   {
-    title: "The Lord Of The Rings",
+    title: "Breakin Bad",
     posterSrc:
-      LordOfTheRings,
+      BreakingBad2,
+    rating: 9.8,
+  },
+  {
+    title: "Peaky Blinders",
+    posterSrc:
+      PeakyBlinders2,
+    rating: 9.2,
+  },
+  {
+    title: "Inside Out",
+    posterSrc:
+      inside,
     rating: 9.0,
   },
   {
-    title: "The Lord Of The Rings",
+    title: "Dark",
     posterSrc:
-      LordOfTheRings,
+      Dark,
     rating: 9.0,
   },
   {
-    title: "The Lord Of The Rings",
+    title: "Harry Potter And The Prisoner Of Azkban",
     posterSrc:
-      LordOfTheRings,
+      Harry,
     rating: 9.0,
   },
   {
-    title: "The Lord Of The Rings",
+    title: "Avengers Endgame",
     posterSrc:
-      LordOfTheRings,
+      Endgame,
     rating: 9.0,
   },
-  {
-    title: "The Lord Of The Rings",
-    posterSrc:
-      LordOfTheRings,
-    rating: 9.0,
-  },
-  {
-    title: "The Lord Of The Rings",
-    posterSrc:
-      LordOfTheRings,
-    rating: 9.0,
-  },
-  
 ];
 
 export default TopPicksCard;
