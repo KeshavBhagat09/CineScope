@@ -169,6 +169,43 @@ const TopPicksCard = [
       LordOfTheRings,
     rating: 9.0,
   },
+  {
+    title: "The Lord Of The Rings",
+    posterSrc:
+      LordOfTheRings,
+    rating: 9.0,
+  },
+  {
+    title: "The Lord Of The Rings",
+    posterSrc:
+      LordOfTheRings,
+    rating: 9.0,
+  },
+  {
+    title: "The Lord Of The Rings",
+    posterSrc:
+      LordOfTheRings,
+    rating: 9.0,
+  },
+  {
+    title: "The Lord Of The Rings",
+    posterSrc:
+      LordOfTheRings,
+    rating: 9.0,
+  },
+  {
+    title: "The Lord Of The Rings",
+    posterSrc:
+      LordOfTheRings,
+    rating: 9.0,
+  },
+  {
+    title: "The Lord Of The Rings",
+    posterSrc:
+      LordOfTheRings,
+    rating: 9.0,
+  },
+  
 ];
 
 export default TopPicksCard;
