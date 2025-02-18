@@ -5,6 +5,8 @@ import { VideoData } from "../Data/VideoData";
 import FeaturedMovieCard from "./FeaturedMovieCard";
 import { FeaturedMovieCard as FeaturedMovieCardData } from "../Data/VideoData";
 import TopPicks from "../TopPicks/TopPicks";
+import { CiStreamOff } from "react-icons/ci";
+import StreamingNow from "../StreamingNow/StreamingNow";
 
 
 const FeaturedMovies = () => {
@@ -153,7 +155,8 @@ const FeaturedMovies = () => {
       </div>
       <div className="mt-12">
         <TopPicks/>
-        {/* <MovieCard/> */}
+        <StreamingNow />
+        {/* <MovieCard/> */}z
       </div>
     </div>
   );
