@@ -3,7 +3,6 @@ import MovieCard from "../../components/TopPicks/MovieCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Avenger from "../../assets/Avenger.jpeg";
 import Boys from "../../assets/Boys.jpeg";
-import HandmaidTale from "../../assets/HandmaidTale.jpeg";
 import Loki from "../../assets/Loki.jpeg";
 import Reacher from "../../assets/Reacher.jpeg";
 import Strangers from "../../assets/Strangers.jpeg";
@@ -12,17 +11,20 @@ import inside from "../../assets/inside.jpg";
 import BreakingBad from "../../assets/BreakingBad.jpg";
 import Dark from "../../assets/Dark.jpeg";
 import GameOfThrones2 from "../../assets/GameOfThrones2.jpg";
-import StreamingNow from "../../assets/StreamingNow.png"; // Import the background image
+import StreamingNow from "../../assets/StreamingNow.png";
+import PaatalLok from "../../assets/PaatalLok.jpeg";
+import DarkKnight from "../../assets/DarkKnight.jpeg";
+import Social from "../../assets/SocialNetwork.jpeg";
 
 // Dummy data for different platforms
 const moviesByPlatform = {
   "Prime Video": [
-    { title: "The Last of Us", rating: "8.9", posterSrc: TheLastOfUs },
+    { title: "Paatal Lok", rating: "8.9", posterSrc: PaatalLok },
     { title: "The Boys", rating: "7.5", posterSrc: Boys },
     { title: "Reacher", rating: "8.0", posterSrc: Reacher },
-    { title: "The Last of Us", rating: "8.9", posterSrc: TheLastOfUs },
+    { title: "The Last of Us", rating: "8.9", posterSrc: DarkKnight },
     { title: "The Boys", rating: "7.5", posterSrc: Boys },
-    { title: "Reacher", rating: "8.0", posterSrc: Reacher },
+    { title: "Reacher", rating: "8.0", posterSrc: Social },
   ],
   "Disney+": [
     { title: "Avengers", rating: "9.0", posterSrc: Avenger },
