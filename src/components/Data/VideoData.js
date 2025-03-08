@@ -63,31 +63,26 @@ export const VideoData = [
 export const FeaturedMovies = [
   {
     id: 1,
-    title: "Where might 'Dune' go next?",
-    image: dune,
-  },
-  {
-    id: 2,
     title: "Inside Out 2",
     image: inside,
   },
   {
-    id: 3,
+    id: 2,
     title: "Fallout",
     image: fallout2,
   },
   {
-    id: 4,
+    id: 3,
     title: "Breaking Bad",
     image: BreakingBad,
   },
   {
-    id: 5,
+    id: 4,
     title: "Game of Thrones",
     image: GameOfThrones,
   },
   {
-    id: 6,
+    id: 5,
     title: "Peaky Blinders",
     image: PeakyBlinders,
   },
@@ -96,38 +91,32 @@ export const FeaturedMovies = [
 export const FeaturedMovieCard = [
   {
     id: 1,
-    title: "Where might 'Dune' go next?",
-    subtitle: "Our 'Dune: Part Three' Theories",
-    image: dune2,
-  },
-  {
-    id: 2,
     title: "Inside Out 2",
     subtitle: 'Watch the new "Inside Out 2" Trailer',
     image: inside2,
   },
   {
-    id: 3,
+    id: 2,
     title: "Fallout",
     subtitle: 'Watch the new "Fallout" Trailer',
     image: fallout,
   },
   {
-    id: 4,
+    id: 3,
     title: "Breaking Bad",
     subtitle:
       "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student to secure his family's future.",
     image: BreakingBad2,
   },
   {
-    id: 5,
+    id: 4,
     title: "Game of Thrones",
     subtitle:
       "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.",
     image: GameOfThrones2,
   },
   {
-    id: 6,
+    id: 5,
     title: "Peaky Blinders",
     subtitle:
       "A gangster family epic set in 1919 Birmingham, England; centered on a gang who sew razor blades in the peaks of their caps, and their fierce boss Tommy Shelby.",
