@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
-// import Logo from "../assets/logo.png";
 import Logo from "../../assets/Logo.png";
 import Watchlist from "../../assets/Watchlist.svg";
 import { Link } from "react-router-dom"; // Import Link for navigation
