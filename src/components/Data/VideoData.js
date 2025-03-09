@@ -1,6 +1,4 @@
 import { image, title } from "framer-motion/client";
-import dune from "../../assets/dune.jpg";
-import dune2 from "../../assets/dune2.jpeg";
 import fallout from "../../assets/fallout.jpg";
 import fallout2 from "../../assets/fallout2.jpg";
 import inside from "../../assets/inside.jpg";

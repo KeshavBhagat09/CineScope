@@ -15,6 +15,10 @@ import StreamingNow from "../../assets/StreamingNow.png";
 import PaatalLok from "../../assets/PaatalLok.jpeg";
 import DarkKnight from "../../assets/DarkKnight.jpeg";
 import Social from "../../assets/SocialNetwork.jpeg";
+import LordOfTheRings from "../../assets/LordOfTheRings.jpeg";
+import StarWars from "../../assets/StarWars.jpeg";
+import GameOfThrones from "../../assets/GameOfThrones.jpg";
+
 
 // Dummy data for different platforms
 const moviesByPlatform = {
@@ -23,16 +27,16 @@ const moviesByPlatform = {
     { title: "The Boys", rating: "7.5", posterSrc: Boys },
     { title: "Reacher", rating: "8.0", posterSrc: Reacher },
     { title: "The Last of Us", rating: "8.9", posterSrc: DarkKnight },
-    { title: "The Boys", rating: "7.5", posterSrc: Boys },
+    { title: "The Lord Of The Rings", rating: "7.5", posterSrc: LordOfTheRings },
     { title: "Reacher", rating: "8.0", posterSrc: Social },
   ],
   "Disney+": [
     { title: "Avengers", rating: "9.0", posterSrc: Avenger },
     { title: "Loki", rating: "8.2", posterSrc: Loki },
     { title: "Inside out 2", rating: "7.9", posterSrc: inside },
-    { title: "Avengers", rating: "9.0", posterSrc: Avenger },
+    { title: "Starwars", rating: "9.0", posterSrc: StarWars },
     { title: "Loki", rating: "8.2", posterSrc: Loki },
-    { title: "Inside out 2", rating: "7.9", posterSrc: inside },
+    { title: "Game of thrones", rating: "7.9", posterSrc: GameOfThrones },
   ],
   Netflix: [
     { title: "Breaking Bad", rating: "8.7", posterSrc: BreakingBad },

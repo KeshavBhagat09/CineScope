@@ -53,4 +53,4 @@ Page_Component.propTypes = {
   children: PropTypes.node, // Prop validation for children
 };
 
-export default router; // Exporting router for use in the main app
+export default router;
