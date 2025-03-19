@@ -8,12 +8,13 @@ import TopPicks from "../TopPicks/TopPicks";
 import StreamingNow from "../StreamingNow/StreamingNow";
 import Watchlist from "../Watchlist/Watchlist";
 
-
 const FeaturedMovies = () => {
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
   const [backgroundGradient, setBackgroundGradient] = useState(
     "linear-gradient(to bottom, #1a1a1a, #000)"
   );
+  // Create a new state for the synchronized side videos
+  const [syncedVideoData, setSyncedVideoData] = useState(VideoData);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,6 +23,26 @@ const FeaturedMovies = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Add a new useEffect to update the side section when featured index changes
+  useEffect(() => {
+    // Create a rotated version of VideoData based on the current featured index
+    const rotateVideos = () => {
+      // Create a copy of VideoData
+      const videosCopy = [...VideoData];
+      
+      // Rotate the array by the current featured index
+      // This will ensure the videos in the side section change in sync with the featured videos
+      const rotatedVideos = [
+        ...videosCopy.slice(currentFeaturedIndex % videosCopy.length),
+        ...videosCopy.slice(0, currentFeaturedIndex % videosCopy.length)
+      ];
+      
+      setSyncedVideoData(rotatedVideos);
+    };
+    
+    rotateVideos();
+  }, [currentFeaturedIndex]);
 
   useEffect(() => {
     const extractColorFromImage = (imageSrc) => {
@@ -103,7 +124,7 @@ const FeaturedMovies = () => {
               loading="lazy"
               src={currentFeaturedVideo.image || "/placeholder.svg"}
               alt={currentFeaturedVideo.title}
-              className="object-contain grow  w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300 -mt-9"
+              className="object-contain grow w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300 -mt-9"
             />
           </div>
 
@@ -146,7 +167,8 @@ const FeaturedMovies = () => {
               </button>
             </div>
             <div className="space-y-4 max-h-[calc(100vh-200px)]">
-              {VideoData.map((video) => (
+              {/* Use the synchronized video data instead of static VideoData */}
+              {syncedVideoData.map((video) => (
                 <VideoCard key={video.id} {...video} />
               ))}
             </div>
