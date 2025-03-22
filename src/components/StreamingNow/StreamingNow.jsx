@@ -119,7 +119,7 @@ const TopPicks = () => {
         )}
 
         {/* Movie Cards - Horizontal Scroll */}
-        <div className="flex space-x-10 overflow-hidden w-full z-10">
+        <div className="flex space-x-10 overflow-hidden w-full z-10 gap-4">
           {currentMovies.slice(startIndex, endIndex).map((movie, index) => (
             <MovieCard key={index} {...movie} />
           ))}
