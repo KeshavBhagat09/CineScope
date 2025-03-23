@@ -9,41 +9,41 @@ import StreamingNow from "../StreamingNow/StreamingNow";
 import Watchlist from "../Watchlist/Watchlist";
 
 const FeaturedMovies = () => {
+  // State to track the currently featured video index
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
+
+  // State to manage the background gradient
   const [backgroundGradient, setBackgroundGradient] = useState(
     "linear-gradient(to bottom, #1a1a1a, #000)"
   );
-  // Create a new state for the synchronized side videos
+
+  // State to synchronize side videos with the featured video
   const [syncedVideoData, setSyncedVideoData] = useState(VideoData);
 
+  // Automatically change the featured video every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentFeaturedIndex((prevIndex) => (prevIndex + 1) % FeaturedData.length);
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
-  // Add a new useEffect to update the side section when featured index changes
+  // Update the side section videos when the featured video index changes
   useEffect(() => {
-    // Create a rotated version of VideoData based on the current featured index
     const rotateVideos = () => {
-      // Create a copy of VideoData
-      const videosCopy = [...VideoData];
-      
-      // Rotate the array by the current featured index
-      // This will ensure the videos in the side section change in sync with the featured videos
+      const videosCopy = [...VideoData]; // Create a copy of VideoData
       const rotatedVideos = [
         ...videosCopy.slice(currentFeaturedIndex % videosCopy.length),
-        ...videosCopy.slice(0, currentFeaturedIndex % videosCopy.length)
+        ...videosCopy.slice(0, currentFeaturedIndex % videosCopy.length),
       ];
-      
-      setSyncedVideoData(rotatedVideos);
+      setSyncedVideoData(rotatedVideos); // Update the synchronized video data
     };
-    
+
     rotateVideos();
   }, [currentFeaturedIndex]);
 
+  // Extract the dominant color from the current featured video's image
   useEffect(() => {
     const extractColorFromImage = (imageSrc) => {
       return new Promise((resolve, reject) => {
@@ -64,6 +64,7 @@ const FeaturedMovies = () => {
 
           let r = 0, g = 0, b = 0, count = 0;
 
+          // Calculate the average color
           for (let i = 0; i < pixels.length; i += 4 * 100) {
             r += pixels[i];
             g += pixels[i + 1];
@@ -76,7 +77,6 @@ const FeaturedMovies = () => {
           b = Math.floor(b / count);
 
           const hexColor = `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
-
           resolve(hexColor);
         };
 
@@ -99,16 +99,20 @@ const FeaturedMovies = () => {
     updateGradient();
   }, [currentFeaturedIndex]);
 
+  // Handle cases where there are no featured videos
   if (!FeaturedData || FeaturedData.length === 0) {
     return <div className="text-white p-8">No featured videos available</div>;
   }
 
+  // Get the current featured video data
   const currentFeaturedVideo = FeaturedData[currentFeaturedIndex];
 
+  // Navigate to the next featured video
   const handleNext = () => {
     setCurrentFeaturedIndex((prevIndex) => (prevIndex + 1) % FeaturedData.length);
   };
 
+  // Navigate to the previous featured video
   const handlePrev = () => {
     setCurrentFeaturedIndex(
       (prevIndex) => (prevIndex - 1 + FeaturedData.length) % FeaturedData.length
@@ -116,8 +120,12 @@ const FeaturedMovies = () => {
   };
 
   return (
-    <div className="min-h-screen p-8 transition-all duration-500 relative" style={{ background: backgroundGradient }}>
+    <div
+      className="min-h-screen p-8 transition-all duration-500 relative"
+      style={{ background: backgroundGradient }}
+    >
       <div className="flex gap-5 max-md:flex-col">
+        {/* Main Featured Video Section */}
         <div className="relative flex flex-col w-[74%] max-md:w-full">
           <div className="relative group cursor-pointer overflow-hidden rounded-xl">
             <img
@@ -142,11 +150,13 @@ const FeaturedMovies = () => {
             ❯
           </button>
 
-          <div className="absolute bottom-5 left-5">  
+          {/* Featured Movie Card */}
+          <div className="absolute bottom-5 left-5">
             <FeaturedMovieCard video={FeaturedMovieCardData[currentFeaturedIndex]} />
           </div>
         </div>
 
+        {/* Side Section with Synchronized Videos */}
         <div className="flex flex-col ml-5 w-[26%] max-md:ml-0 max-md:w-full">
           <div className="flex flex-col w-full max-md:mt-8">
             <div className="flex gap-5 justify-between w-full mb-6">
@@ -167,7 +177,7 @@ const FeaturedMovies = () => {
               </button>
             </div>
             <div className="space-y-4 max-h-[calc(100vh-200px)]">
-              {/* Use the synchronized video data instead of static VideoData */}
+              {/* Render synchronized video data */}
               {syncedVideoData.map((video) => (
                 <VideoCard key={video.id} {...video} />
               ))}
@@ -175,8 +185,10 @@ const FeaturedMovies = () => {
           </div>
         </div>
       </div>
+
+      {/* Additional Sections */}
       <div className="mt-12">
-        <TopPicks/>
+        <TopPicks />
         <StreamingNow />
         <Watchlist />
       </div>
