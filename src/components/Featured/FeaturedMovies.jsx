@@ -1,49 +1,62 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import VideoCard from "./VideoCard";
-import { FeaturedMovies as FeaturedData } from "../Data/VideoData";
-import { VideoData } from "../Data/VideoData";
 import FeaturedMovieCard from "./FeaturedMovieCard";
-import { FeaturedMovieCard as FeaturedMovieCardData } from "../Data/VideoData";
 import TopPicks from "../TopPicks/TopPicks";
 import StreamingNow from "../StreamingNow/StreamingNow";
 import Watchlist from "../Watchlist/Watchlist";
+import { FeaturedMovies as FeaturedData } from "../Data/VideoData";
+import { VideoData } from "../Data/VideoData.js"
 
-const FeaturedMovies = () => {
-  // State to track the currently featured video index
+const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
+  const [featuredVideos, setFeaturedVideos] = useState([]);
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
-
-  // State to manage the background gradient
   const [backgroundGradient, setBackgroundGradient] = useState(
     "linear-gradient(to bottom, #1a1a1a, #000)"
   );
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const nextVideoRef = useRef(null);
 
-  // State to synchronize side videos with the featured video
-  const [syncedVideoData, setSyncedVideoData] = useState(VideoData);
-
-  // Automatically change the featured video every 5 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentFeaturedIndex((prevIndex) => (prevIndex + 1) % FeaturedData.length);
-    }, 5000);
-
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, []);
-
-  // Update the side section videos when the featured video index changes
-  useEffect(() => {
-    const rotateVideos = () => {
-      const videosCopy = [...VideoData]; // Create a copy of VideoData
-      const rotatedVideos = [
-        ...videosCopy.slice(currentFeaturedIndex % videosCopy.length),
-        ...videosCopy.slice(0, currentFeaturedIndex % videosCopy.length),
-      ];
-      setSyncedVideoData(rotatedVideos); // Update the synchronized video data
+    const fetchVideos = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await axios.get(
+          "http://localhost:8000/api/v1/videos",
+          {
+            params: { title: sectionTitle, page: 1, limit: 3 }, // Limit set to 3
+          }
+        );
+        console.log("API Response:", response.data);
+        const videos = response.data.data || [];
+        if (videos.length === 0) {
+          throw new Error("No videos returned from API");
+        }
+        setFeaturedVideos(videos);
+      } catch (err) {
+        console.error("Error fetching featured videos:", err);
+        setError("Failed to load videos. Please try again later.");
+        setFeaturedVideos([]); // Reset to empty array on error
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    rotateVideos();
-  }, [currentFeaturedIndex]);
+    fetchVideos();
+  }, [sectionTitle]);
 
-  // Extract the dominant color from the current featured video's image
+  useEffect(() => {
+    if (featuredVideos.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentFeaturedIndex(
+        (prevIndex) => (prevIndex + 1) % featuredVideos.length
+      );
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [featuredVideos]);
+
   useEffect(() => {
     const extractColorFromImage = (imageSrc) => {
       return new Promise((resolve, reject) => {
@@ -54,17 +67,17 @@ const FeaturedMovies = () => {
         img.onload = () => {
           const canvas = document.createElement("canvas");
           const ctx = canvas.getContext("2d");
-
           canvas.width = img.width;
           canvas.height = img.height;
           ctx.drawImage(img, 0, 0, img.width, img.height);
 
           const imageData = ctx.getImageData(0, 0, img.width, img.height);
           const pixels = imageData.data;
+          let r = 0,
+            g = 0,
+            b = 0,
+            count = 0;
 
-          let r = 0, g = 0, b = 0, count = 0;
-
-          // Calculate the average color
           for (let i = 0; i < pixels.length; i += 4 * 100) {
             r += pixels[i];
             g += pixels[i + 1];
@@ -76,48 +89,40 @@ const FeaturedMovies = () => {
           g = Math.floor(g / count);
           b = Math.floor(b / count);
 
-          const hexColor = `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
-          resolve(hexColor);
+          resolve(
+            `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`
+          );
         };
 
         img.onerror = () => reject("Failed to load image.");
       });
     };
 
-    const updateGradient = async () => {
-      if (!FeaturedData[currentFeaturedIndex]?.image) return;
+    if (featuredVideos[currentFeaturedIndex]?.image) {
+      extractColorFromImage(featuredVideos[currentFeaturedIndex].image)
+        .then((color) =>
+          setBackgroundGradient(`linear-gradient(to bottom, ${color}, #000)`)
+        )
+        .catch(() =>
+          setBackgroundGradient("linear-gradient(to bottom, #1a1a1a, #000)")
+        );
+    }
+  }, [currentFeaturedIndex, featuredVideos]);
 
-      try {
-        const dominantColor = await extractColorFromImage(FeaturedData[currentFeaturedIndex].image);
-        setBackgroundGradient(`linear-gradient(to bottom, ${dominantColor}, #000)`);
-      } catch (error) {
-        console.error("Error extracting color:", error);
-        setBackgroundGradient("linear-gradient(to bottom, #1a1a1a, #000)");
-      }
-    };
+  // Ensure the video plays when the index changes
+  useEffect(() => {
+    if (nextVideoRef.current && featuredVideos[currentFeaturedIndex]?.videoUrl) {
+      nextVideoRef.current.load(); // Reload the video source
+      nextVideoRef.current.play().catch((err) => {
+        console.error("Error playing video:", err);
+      });
+    }
+  }, [currentFeaturedIndex, featuredVideos]);
 
-    updateGradient();
-  }, [currentFeaturedIndex]);
-
-  // Handle cases where there are no featured videos
-  if (!FeaturedData || FeaturedData.length === 0) {
+  if (isLoading) return <div className="text-white p-8">Loading videos...</div>;
+  if (error) return <div className="text-red-500 p-8">{error}</div>;
+  if (!featuredVideos.length)
     return <div className="text-white p-8">No featured videos available</div>;
-  }
-
-  // Get the current featured video data
-  const currentFeaturedVideo = FeaturedData[currentFeaturedIndex];
-
-  // Navigate to the next featured video
-  const handleNext = () => {
-    setCurrentFeaturedIndex((prevIndex) => (prevIndex + 1) % FeaturedData.length);
-  };
-
-  // Navigate to the previous featured video
-  const handlePrev = () => {
-    setCurrentFeaturedIndex(
-      (prevIndex) => (prevIndex - 1 + FeaturedData.length) % FeaturedData.length
-    );
-  };
 
   return (
     <div
@@ -125,68 +130,61 @@ const FeaturedMovies = () => {
       style={{ background: backgroundGradient }}
     >
       <div className="flex gap-5 max-md:flex-col">
-        {/* Main Featured Video Section */}
         <div className="relative flex flex-col w-[74%] max-md:w-full">
           <div className="relative group cursor-pointer overflow-hidden rounded-xl">
-            <img
-              loading="lazy"
-              src={currentFeaturedVideo.image || "/placeholder.svg"}
-              alt={currentFeaturedVideo.title}
+            <video
+              src={
+                featuredVideos[currentFeaturedIndex]?.videoUrl ||
+                
+                "/placeholder.mp4"
+              }
+              ref={nextVideoRef}
+              loop
+              muted
+              autoPlay
               className="object-contain grow w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300 -mt-9"
             />
           </div>
-
-          {/* Navigation Buttons */}
           <button
-            onClick={handlePrev}
+            onClick={() =>
+              setCurrentFeaturedIndex(
+                (prev) =>
+                  (prev - 1 + featuredVideos.length) % featuredVideos.length
+              )
+            }
             className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all"
           >
             ❮
           </button>
           <button
-            onClick={handleNext}
+            onClick={() =>
+              setCurrentFeaturedIndex(
+                (prev) => (prev + 1) % featuredVideos.length
+              )
+            }
             className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all"
           >
             ❯
           </button>
-
-          {/* Featured Movie Card */}
           <div className="absolute bottom-5 left-5">
-            <FeaturedMovieCard video={FeaturedMovieCardData[currentFeaturedIndex]} />
+            <FeaturedMovieCard video={featuredVideos[currentFeaturedIndex]} />
           </div>
         </div>
-
-        {/* Side Section with Synchronized Videos */}
         <div className="flex flex-col ml-5 w-[26%] max-md:ml-0 max-md:w-full">
           <div className="flex flex-col w-full max-md:mt-8">
             <div className="flex gap-5 justify-between w-full mb-6">
               <div className="gap-2 self-stretch my-auto text-lg text-white font-semibold">
                 Featured Videos
               </div>
-              <button
-                className="flex gap-2.5 items-center px-5 py-2 text-base leading-7 rounded-xl shadow-sm bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors duration-200 min-h-[42px] text-stone-300"
-                aria-label="Browse all trailers"
-              >
-                <span className="self-stretch my-auto">Browse Trailers</span>
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/01a1ffdf5e4835fe6ea08903df43017c6a34db607bc5a25a717a5bf79630535b?placeholderIfAbsent=true&apiKey=3953249e405f4f0f9fc1a18498c625c2"
-                  alt=""
-                  className="object-contain shrink-0 self-stretch my-auto w-6 aspect-square"
-                />
-              </button>
             </div>
             <div className="space-y-4 max-h-[calc(100vh-200px)]">
-              {/* Render synchronized video data */}
-              {syncedVideoData.map((video) => (
-                <VideoCard key={video.id} {...video} />
+              {VideoData.map((video) => (
+                <VideoCard key={video.id} {...video} /> //side section images
               ))}
             </div>
           </div>
         </div>
       </div>
-
-      {/* Additional Sections */}
       <div className="mt-12">
         <TopPicks />
         <StreamingNow />

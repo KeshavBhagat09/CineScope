@@ -10,9 +10,9 @@ const FeaturedMovieCard = ({ video }) => {
       <div className="flex items-end gap-4">
         {/* Image or Poster */}
         <img
-          src={video.image || video.poster} // Use the image or fallback to the poster
-          alt={video.title} // Alt text for accessibility
-          className="w-60 h-80 object-cover rounded-md" // Styling for the image
+          src={video.image || video.poster} // Ensure this is correctly pulling from VideoData.js
+          alt={video.title}
+          className="w-60 h-80 object-cover rounded-md"
         />
 
         {/* Play Icon */}
