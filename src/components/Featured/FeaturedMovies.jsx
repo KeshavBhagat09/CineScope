@@ -5,11 +5,10 @@ import FeaturedMovieCard from "./FeaturedMovieCard";
 import TopPicks from "../TopPicks/TopPicks";
 import StreamingNow from "../StreamingNow/StreamingNow";
 import Watchlist from "../Watchlist/Watchlist";
-import { FeaturedMovies as FeaturedData } from "../Data/VideoData";
-import { VideoData } from "../Data/VideoData.js"
+import { VideoData } from "../Data/VideoData.js"; // Import VideoData for images
 
 const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
-  const [featuredVideos, setFeaturedVideos] = useState([]);
+  const [featuredVideos, setFeaturedVideos] = useState([]); // Video data from API
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
   const [backgroundGradient, setBackgroundGradient] = useState(
     "linear-gradient(to bottom, #1a1a1a, #000)"
@@ -18,6 +17,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   const [error, setError] = useState(null);
   const nextVideoRef = useRef(null);
 
+  // Fetch video data from API
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -26,7 +26,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
         const response = await axios.get(
           "http://localhost:8000/api/v1/videos",
           {
-            params: { title: sectionTitle, page: 1, limit: 3 }, // Limit set to 3
+            params: { title: sectionTitle, page: 1, limit: 3 },
           }
         );
         console.log("API Response:", response.data);
@@ -38,7 +38,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
       } catch (err) {
         console.error("Error fetching featured videos:", err);
         setError("Failed to load videos. Please try again later.");
-        setFeaturedVideos([]); // Reset to empty array on error
+        setFeaturedVideos([]);
       } finally {
         setIsLoading(false);
       }
@@ -47,6 +47,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     fetchVideos();
   }, [sectionTitle]);
 
+  // Auto-rotate videos
   useEffect(() => {
     if (featuredVideos.length === 0) return;
     const interval = setInterval(() => {
@@ -57,6 +58,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     return () => clearInterval(interval);
   }, [featuredVideos]);
 
+  // Extract background color from VideoData image
   useEffect(() => {
     const extractColorFromImage = (imageSrc) => {
       return new Promise((resolve, reject) => {
@@ -98,8 +100,10 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
       });
     };
 
-    if (featuredVideos[currentFeaturedIndex]?.image) {
-      extractColorFromImage(featuredVideos[currentFeaturedIndex].image)
+    // Use VideoData for the image, matched by index or id
+    const videoDataMatch = VideoData[currentFeaturedIndex % VideoData.length];
+    if (videoDataMatch?.image) {
+      extractColorFromImage(videoDataMatch.image)
         .then((color) =>
           setBackgroundGradient(`linear-gradient(to bottom, ${color}, #000)`)
         )
@@ -107,12 +111,12 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
           setBackgroundGradient("linear-gradient(to bottom, #1a1a1a, #000)")
         );
     }
-  }, [currentFeaturedIndex, featuredVideos]);
+  }, [currentFeaturedIndex]);
 
-  // Ensure the video plays when the index changes
+  // Ensure video plays when index changes
   useEffect(() => {
     if (nextVideoRef.current && featuredVideos[currentFeaturedIndex]?.videoUrl) {
-      nextVideoRef.current.load(); // Reload the video source
+      nextVideoRef.current.load();
       nextVideoRef.current.play().catch((err) => {
         console.error("Error playing video:", err);
       });
@@ -123,6 +127,15 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   if (error) return <div className="text-red-500 p-8">{error}</div>;
   if (!featuredVideos.length)
     return <div className="text-white p-8">No featured videos available</div>;
+
+  // Match API video with VideoData for images
+  const getVideoWithImage = (apiVideo, index) => {
+    const videoDataMatch = VideoData[index % VideoData.length]; // Simple index-based matching
+    return {
+      ...apiVideo,
+      image: videoDataMatch?.image || videoDataMatch?.poster || "/placeholder.jpg",
+    };
+  };
 
   return (
     <div
@@ -135,7 +148,6 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
             <video
               src={
                 featuredVideos[currentFeaturedIndex]?.videoUrl ||
-                
                 "/placeholder.mp4"
               }
               ref={nextVideoRef}
@@ -167,7 +179,12 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
             ❯
           </button>
           <div className="absolute bottom-5 left-5">
-            <FeaturedMovieCard video={featuredVideos[currentFeaturedIndex]} />
+            <FeaturedMovieCard
+              video={getVideoWithImage(
+                featuredVideos[currentFeaturedIndex],
+                currentFeaturedIndex
+              )}
+            />
           </div>
         </div>
         <div className="flex flex-col ml-5 w-[26%] max-md:ml-0 max-md:w-full">
