@@ -9,13 +9,22 @@ import { VideoData } from "../Data/VideoData.js"; // Import VideoData for images
 
 const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   const [featuredVideos, setFeaturedVideos] = useState([]);
-  const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(3); // Initial index
+  const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
   const [backgroundGradient, setBackgroundGradient] = useState(
     "linear-gradient(to bottom, #1a1a1a, #000)"
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const videoRef = useRef(null);
+
+  // Array of custom images for FeaturedMovieCard (one per video)
+  const customFeaturedImages = [
+    "../src/assets/BreakingBad2.jpg", // Image for video 1
+    "../src/assets/inside2.jpeg",       // Image for video 2
+    "../src/assets/PeakyBlinders2.jpg",       // Image for video 3
+    "../src/assets/inside.jpg",       // Image for video 4
+    // Add more images as needed to match your videos
+  ];
 
   // Fetch video data from API
   useEffect(() => {
@@ -31,13 +40,20 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
               page: 1,
               limit: 10,
               sort: "createdAt",
-            }, // Ensuring ordered videos
+            },
           }
         );
         console.log("API Response:", response.data);
-        const videos = response.data.data || [];
+        let videos = response.data.data || [];
         if (videos.length === 0) throw new Error("No videos returned from API");
+
+        videos.sort((a, b) => a.title.localeCompare(b.title));
         setFeaturedVideos(videos);
+
+        const startIndex = videos.findIndex((video) =>
+          video.title.toLowerCase().includes("trailer1")
+        );
+        setCurrentFeaturedIndex(startIndex !== -1 ? startIndex : 0);
       } catch (err) {
         console.error("Error fetching featured videos:", err);
         setError("Failed to load videos. Please try again later.");
@@ -52,8 +68,8 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   // Ensure video plays when index changes
   useEffect(() => {
     if (videoRef.current && featuredVideos[currentFeaturedIndex]?.videoUrl) {
-      videoRef.current.pause(); // Stop the previous video
-      videoRef.current.load(); // Reload new video
+      videoRef.current.pause();
+      videoRef.current.load();
       videoRef.current
         .play()
         .catch((err) => console.error("Error playing video:", err));
@@ -134,13 +150,12 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   if (!featuredVideos.length)
     return <div className="text-white p-8">No featured videos available</div>;
 
-  // Match API video with VideoData for images
+  // Match API video with custom image based on index
   const getVideoWithImage = (apiVideo, index) => {
-    const videoDataMatch = VideoData[index % VideoData.length]; // Simple index-based matching
     return {
       ...apiVideo,
-      image:
-        videoDataMatch?.image || videoDataMatch?.poster || "/placeholder.jpg",
+      image: customFeaturedImages[index % customFeaturedImages.length], // Cycle through images
+      poster: customFeaturedImages[index % customFeaturedImages.length], // Fallback
     };
   };
 
@@ -160,7 +175,6 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
               ref={videoRef}
               loop
               muted
-              autoPlay
               playsInline
               className="object-contain grow w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300 -mt-9"
             />
@@ -168,7 +182,8 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
           <button
             onClick={() =>
               setCurrentFeaturedIndex(
-                (prev) => (prev + 1) % featuredVideos.length // Should go forward
+                (prev) =>
+                  (prev - 1 + featuredVideos.length) % featuredVideos.length // Previous: Decrease index
               )
             }
             className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all"
@@ -178,8 +193,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
           <button
             onClick={() =>
               setCurrentFeaturedIndex(
-                (prev) =>
-                  (prev - 1 + featuredVideos.length) % featuredVideos.length // Should go backward
+                (prev) => (prev + 1) % featuredVideos.length // Next: Increase index
               )
             }
             className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all"
