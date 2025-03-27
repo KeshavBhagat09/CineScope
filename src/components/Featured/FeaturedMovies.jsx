@@ -8,14 +8,14 @@ import Watchlist from "../Watchlist/Watchlist";
 import { VideoData } from "../Data/VideoData.js"; // Import VideoData for images
 
 const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
-  const [featuredVideos, setFeaturedVideos] = useState([]); // Video data from API
-  const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
+  const [featuredVideos, setFeaturedVideos] = useState([]);
+  const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(3); // Initial index
   const [backgroundGradient, setBackgroundGradient] = useState(
     "linear-gradient(to bottom, #1a1a1a, #000)"
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const nextVideoRef = useRef(null);
+  const videoRef = useRef(null);
 
   // Fetch video data from API
   useEffect(() => {
@@ -26,14 +26,17 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
         const response = await axios.get(
           "http://localhost:8000/api/v1/videos",
           {
-            params: { title: sectionTitle, page: 1, limit: 3 },
+            params: {
+              title: sectionTitle,
+              page: 1,
+              limit: 10,
+              sort: "createdAt",
+            }, // Ensuring ordered videos
           }
         );
         console.log("API Response:", response.data);
         const videos = response.data.data || [];
-        if (videos.length === 0) {
-          throw new Error("No videos returned from API");
-        }
+        if (videos.length === 0) throw new Error("No videos returned from API");
         setFeaturedVideos(videos);
       } catch (err) {
         console.error("Error fetching featured videos:", err);
@@ -43,20 +46,34 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
         setIsLoading(false);
       }
     };
-
     fetchVideos();
   }, [sectionTitle]);
 
-  // Auto-rotate videos
+  // Ensure video plays when index changes
   useEffect(() => {
-    if (featuredVideos.length === 0) return;
-    const interval = setInterval(() => {
-      setCurrentFeaturedIndex(
-        (prevIndex) => (prevIndex + 1) % featuredVideos.length
-      );
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [featuredVideos]);
+    if (videoRef.current && featuredVideos[currentFeaturedIndex]?.videoUrl) {
+      videoRef.current.pause(); // Stop the previous video
+      videoRef.current.load(); // Reload new video
+      videoRef.current
+        .play()
+        .catch((err) => console.error("Error playing video:", err));
+    }
+  }, [currentFeaturedIndex, featuredVideos]);
+
+  // Play next video when current one ends
+  useEffect(() => {
+    if (videoRef.current) {
+      const handleVideoEnd = () => {
+        setCurrentFeaturedIndex(
+          (prevIndex) => (prevIndex + 1) % featuredVideos.length
+        );
+      };
+
+      videoRef.current.addEventListener("ended", handleVideoEnd);
+      return () =>
+        videoRef.current?.removeEventListener("ended", handleVideoEnd);
+    }
+  }, [featuredVideos, currentFeaturedIndex]);
 
   // Extract background color from VideoData image
   useEffect(() => {
@@ -100,7 +117,6 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
       });
     };
 
-    // Use VideoData for the image, matched by index or id
     const videoDataMatch = VideoData[currentFeaturedIndex % VideoData.length];
     if (videoDataMatch?.image) {
       extractColorFromImage(videoDataMatch.image)
@@ -113,16 +129,6 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     }
   }, [currentFeaturedIndex]);
 
-  // Ensure video plays when index changes
-  useEffect(() => {
-    if (nextVideoRef.current && featuredVideos[currentFeaturedIndex]?.videoUrl) {
-      nextVideoRef.current.load();
-      nextVideoRef.current.play().catch((err) => {
-        console.error("Error playing video:", err);
-      });
-    }
-  }, [currentFeaturedIndex, featuredVideos]);
-
   if (isLoading) return <div className="text-white p-8">Loading videos...</div>;
   if (error) return <div className="text-red-500 p-8">{error}</div>;
   if (!featuredVideos.length)
@@ -133,7 +139,8 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     const videoDataMatch = VideoData[index % VideoData.length]; // Simple index-based matching
     return {
       ...apiVideo,
-      image: videoDataMatch?.image || videoDataMatch?.poster || "/placeholder.jpg",
+      image:
+        videoDataMatch?.image || videoDataMatch?.poster || "/placeholder.jpg",
     };
   };
 
@@ -150,18 +157,18 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
                 featuredVideos[currentFeaturedIndex]?.videoUrl ||
                 "/placeholder.mp4"
               }
-              ref={nextVideoRef}
+              ref={videoRef}
               loop
               muted
               autoPlay
+              playsInline
               className="object-contain grow w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300 -mt-9"
             />
           </div>
           <button
             onClick={() =>
               setCurrentFeaturedIndex(
-                (prev) =>
-                  (prev - 1 + featuredVideos.length) % featuredVideos.length
+                (prev) => (prev + 1) % featuredVideos.length // Should go forward
               )
             }
             className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all"
@@ -171,13 +178,15 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
           <button
             onClick={() =>
               setCurrentFeaturedIndex(
-                (prev) => (prev + 1) % featuredVideos.length
+                (prev) =>
+                  (prev - 1 + featuredVideos.length) % featuredVideos.length // Should go backward
               )
             }
             className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all"
           >
             ❯
           </button>
+
           <div className="absolute bottom-5 left-5">
             <FeaturedMovieCard
               video={getVideoWithImage(
@@ -196,7 +205,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
             </div>
             <div className="space-y-4 max-h-[calc(100vh-200px)]">
               {VideoData.map((video) => (
-                <VideoCard key={video.id} {...video} /> //side section images
+                <VideoCard key={video.id} {...video} />
               ))}
             </div>
           </div>
