@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import VideoCard from "./VideoCard";
-import FeaturedMovieCard from "./FeaturedMovieCard";
 import TopPicks from "../TopPicks/TopPicks";
 import StreamingNow from "../StreamingNow/StreamingNow";
 import Watchlist from "../Watchlist/Watchlist";
@@ -20,9 +18,9 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   // Array of custom images for FeaturedMovieCard (one per video)
   const customFeaturedImages = [
     "../src/assets/BreakingBad2.jpg", // Image for video 1
-    "../src/assets/inside2.jpeg",       // Image for video 2
-    "../src/assets/PeakyBlinders2.jpg",       // Image for video 3
-    "../src/assets/inside.jpg",       // Image for video 4
+    "../src/assets/inside2.jpeg", // Image for video 2
+    "../src/assets/PeakyBlinders2.jpg", // Image for video 3
+    "../src/assets/inside.jpg", // Image for video 4
     // Add more images as needed to match your videos
   ];
 
@@ -159,73 +157,99 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     };
   };
 
+  const currentVideo = getVideoWithImage(
+    featuredVideos[currentFeaturedIndex],
+    currentFeaturedIndex
+  );
+
   return (
     <div
-      className="min-h-screen p-8 transition-all duration-500 relative"
+      className="min-h-screen transition-all duration-500 relative"
       style={{ background: backgroundGradient }}
     >
-      <div className="flex gap-5 max-md:flex-col">
-        <div className="relative flex flex-col w-[74%] max-md:w-full">
-          <div className="relative group cursor-pointer overflow-hidden rounded-xl">
-            <video
-              src={
-                featuredVideos[currentFeaturedIndex]?.videoUrl ||
-                "/placeholder.mp4"
-              }
-              ref={videoRef}
-              loop
-              muted
-              playsInline
-              className="object-contain grow w-full rounded-xl aspect-[1.39] max-md:mt-10 max-md:max-w-full transition-transform duration-300 -mt-9"
-            />
-          </div>
-          <button
-            onClick={() =>
-              setCurrentFeaturedIndex(
-                (prev) =>
-                  (prev - 1 + featuredVideos.length) % featuredVideos.length // Previous: Decrease index
-              )
-            }
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all"
-          >
-            ❮
-          </button>
-          <button
-            onClick={() =>
-              setCurrentFeaturedIndex(
-                (prev) => (prev + 1) % featuredVideos.length // Next: Increase index
-              )
-            }
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all"
-          >
-            ❯
-          </button>
+      {/* Featured Movie Section */}
+      <div className="relative w-full h-[80vh] flex items-end">
+        {/* Background Video */}
+        <video
+          src={currentVideo?.videoUrl || "/placeholder.mp4"}
+          ref={videoRef}
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        />
 
-          <div className="absolute bottom-5 left-5">
-            <FeaturedMovieCard
-              video={getVideoWithImage(
-                featuredVideos[currentFeaturedIndex],
-                currentFeaturedIndex
-              )}
-            />
-          </div>
-        </div>
-        <div className="flex flex-col ml-5 w-[26%] max-md:ml-0 max-md:w-full">
-          <div className="flex flex-col w-full max-md:mt-8">
-            <div className="flex gap-5 justify-between w-full mb-6">
-              <div className="gap-2 self-stretch my-auto text-lg text-white font-semibold">
-                Featured Videos
-              </div>
-            </div>
-            <div className="space-y-4 max-h-[calc(100vh-200px)]">
-              {VideoData.map((video) => (
-                <VideoCard key={video.id} {...video} />
+        {/* Overlay with Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
+
+        {/* Movie Details Overlay */}
+        <div className="relative z-10 p-8 md:p-12 max-w-lg">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            {currentVideo?.title || "Movie Title"}
+          </h1>
+          <div className="flex items-center gap-3 text-white mb-4">
+            <div className="flex gap-1">
+              {[...Array(5)].map((_, i) => (
+                <svg
+                  key={i}
+                  className={`w-5 h-5 ${
+                    i < 4 ? "text-blue-500" : "text-gray-400"
+                  }`} // 4 stars filled
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.15c.969 0 1.371 1.24.588 1.81l-3.357 2.44a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.357-2.44a1 1 0 00-1.175 0l-3.357 2.44c-.784.57-1.838-.197-1.54-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.174 9.397c-.783-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.286-3.97z" />
+                </svg>
               ))}
             </div>
+            <span>7 Reviews</span>
+            <span>Season 1 2025</span>
+            <span className="border border-white px-2 py-1 rounded">
+              Cert. 18
+            </span>
           </div>
+          <p className="text-gray-300 mb-6">
+            {currentVideo?.description ||
+              "Seok, an eager yet genius neurosurgeon is reunited with Deokhee, the professor who ruined her long ago. Once, the two surgeons cared for each other more than anyone else. But now with the nothing..."}
+          </p>
+          <button className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition">
+            <svg
+              className="w-5 h-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M6 4l10 6-10 6V4z" />
+            </svg>
+            WATCH TRAILER
+          </button>
         </div>
+
+        {/* Navigation Buttons */}
+        <button
+          onClick={() =>
+            setCurrentFeaturedIndex(
+              (prev) =>
+                (prev - 1 + featuredVideos.length) % featuredVideos.length
+            )
+          }
+          className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all z-10"
+        >
+          ❮
+        </button>
+        <button
+          onClick={() =>
+            setCurrentFeaturedIndex(
+              (prev) => (prev + 1) % featuredVideos.length
+            )
+          }
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full transition-all z-10"
+        >
+          ❯
+        </button>
       </div>
-      <div className="mt-12">
+
+      {/* Other Sections */}
+      <div className="p-8">
         <TopPicks />
         <StreamingNow />
         <Watchlist />
