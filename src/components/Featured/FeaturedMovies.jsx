@@ -13,14 +13,15 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isHovering, setIsHovering] = useState(false); // New state for hover
   const videoRef = useRef(null);
 
   // Array of custom images for FeaturedMovieCard (one per video)
   const customFeaturedImages = [
-    "../src/assets/BreakingBad2.jpg", // Image for video 1
-    "../src/assets/inside2.jpeg", // Image for video 2
+    "../src/assets/BreakingBad.jpg", // Image for video 1
+    "../src/assets/GameOfThrones.jpg", // Image for video 2
     "../src/assets/PeakyBlinders2.jpg", // Image for video 3
-    "../src/assets/inside.jpg", // Image for video 4
+    "../src/assets/Spider.jpg", // Image for video 4
     // Add more images as needed to match your videos
   ];
 
@@ -63,16 +64,19 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     fetchVideos();
   }, [sectionTitle]);
 
-  // Ensure video plays when index changes
+  // Handle video playback on hover
   useEffect(() => {
     if (videoRef.current && featuredVideos[currentFeaturedIndex]?.videoUrl) {
-      videoRef.current.pause();
-      videoRef.current.load();
-      videoRef.current
-        .play()
-        .catch((err) => console.error("Error playing video:", err));
+      if (isHovering) {
+        videoRef.current.load();
+        videoRef.current
+          .play()
+          .catch((err) => console.error("Error playing video:", err));
+      } else {
+        videoRef.current.pause();
+      }
     }
-  }, [currentFeaturedIndex, featuredVideos]);
+  }, [isHovering, currentFeaturedIndex, featuredVideos]);
 
   // Play next video when current one ends
   useEffect(() => {
@@ -81,6 +85,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
         setCurrentFeaturedIndex(
           (prevIndex) => (prevIndex + 1) % featuredVideos.length
         );
+        setIsHovering(false); // Stop hovering state when video ends
       };
 
       videoRef.current.addEventListener("ended", handleVideoEnd);
@@ -168,15 +173,30 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
       style={{ background: backgroundGradient }}
     >
       {/* Featured Movie Section */}
-      <div className="relative w-full h-[80vh] flex items-end">
-        {/* Background Video */}
+      <div
+        className="relative w-full h-[80vh] flex items-end"
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
+        {/* Background Image (shown by default) */}
+        {!isHovering && (
+          <img
+            src={currentVideo?.image || "/placeholder.jpg"}
+            alt={currentVideo?.title || "Featured Movie"}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
+
+        {/* Background Video (shown on hover) */}
         <video
           src={currentVideo?.videoUrl || "/placeholder.mp4"}
           ref={videoRef}
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full object-cover ${
+            isHovering ? "block" : "hidden"
+          }`}
         />
 
         {/* Overlay with Gradient */}
@@ -213,18 +233,14 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
               "Seok, an eager yet genius neurosurgeon is reunited with Deokhee, the professor who ruined her long ago. Once, the two surgeons cared for each other more than anyone else. But now with the nothing..."}
           </p>
           <button className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition">
-            <svg
-              className="w-5 h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M6 4l10 6-10 6V4z" />
             </svg>
             WATCH TRAILER
           </button>
         </div>
 
-        {/* Navigation Buttons */}
+        {/* Navigation Buttons (unchanged "navbar") */}
         <button
           onClick={() =>
             setCurrentFeaturedIndex(
