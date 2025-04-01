@@ -108,7 +108,7 @@ export const Header = () => {
           </motion.button>
 
           {/* Log In Button with Animation */}
-          <Link to="/login">
+          <Link to="/signup">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}

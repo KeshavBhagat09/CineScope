@@ -40,7 +40,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Page_Component />}>
       <Route path="/" element={<FeaturedMovies />} />
-      <Route path="/login" element={<Signin />} /> {/* Updated route */}
+      <Route path="/signup" element={<Signin />} /> {/* Updated route */}
       <Route path="/signin" element={<Login />} />
     </Route>
   )
