@@ -4,8 +4,7 @@ import FeaturedMovies from "../components/Featured/FeaturedMovies.jsx";
 import PropTypes from "prop-types";
 import { Header } from "../components/Navbar/Header.jsx";
 import { Footer } from "../components/UI/Footer.jsx";
-import Signin from "../components/Auth/Signin.jsx"; // Updated import
-import Register from "../components/Auth/Register.jsx";
+import Signin from "../components/Auth/Signup.jsx"; // Updated import
 import Loader from "../components/UI/Loader.jsx";
 import Login from '../components/Navbar/Login.jsx';
 
