@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { createBrowserRouter, createRoutesFromElements, Route, useLocation, Outlet } from "react-router-dom";
 import FeaturedMovies from "../components/Featured/FeaturedMovies.jsx";
 import PropTypes from "prop-types";
 import { Header } from "../components/Navbar/Header.jsx";
 import { Footer } from "../components/UI/Footer.jsx";
-import Signin from "../components/Auth/Signup.jsx"; // Updated import
+import Signin from "../components/Auth/Signup.jsx"; 
 import Loader from "../components/UI/Loader.jsx";
-import Login from '../components/Navbar/Login.jsx';
+import Login from "../components/Navbar/Login.jsx";
+import Watchlist from "../components/Watchlist/Watchlist.jsx"; // Import Watchlist
 
 const Page_Component = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,11 +15,21 @@ const Page_Component = ({ children }) => {
   const hideLayoutRoutes = ["/login", "/register"];
   const shouldShowLayout = !hideLayoutRoutes.includes(location.pathname);
 
+  // ⏳ Watchlist State (Persistent)
+  const [watchlist, setWatchlist] = useState(() => {
+    const savedWatchlist = localStorage.getItem("watchlist");
+    return savedWatchlist ? JSON.parse(savedWatchlist) : [];
+  });
+
+  // 🛠 Sync watchlist with Local Storage
+  useEffect(() => {
+    localStorage.setItem("watchlist", JSON.stringify(watchlist));
+  }, [watchlist]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 3000);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -29,7 +40,7 @@ const Page_Component = ({ children }) => {
   return (
     <div>
       {shouldShowLayout && <Header />}
-      <div>{children || <Outlet />}</div>
+      <Outlet context={{ watchlist, setWatchlist }} /> 
       {shouldShowLayout && <Footer />}
     </div>
   );
@@ -39,8 +50,9 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Page_Component />}>
       <Route path="/" element={<FeaturedMovies />} />
-      <Route path="/signup" element={<Signin />} /> {/* Updated route */}
+      <Route path="/signup" element={<Signin />} />
       <Route path="/signin" element={<Login />} />
+      <Route path="/watchlist" element={<Watchlist />} /> {/* Watchlist Route */}
     </Route>
   )
 );
