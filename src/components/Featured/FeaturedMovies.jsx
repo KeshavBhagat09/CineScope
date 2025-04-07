@@ -31,23 +31,28 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
       try {
         setIsLoading(true);
         setError(null);
-        const response = await axios.get("http://localhost:8000/api/v1/videos", {
-          params: {
-            title: sectionTitle,
-            page: 1,
-            limit: 10,
-            sort: "createdAt",
-          },
-        });
-  
+        const response = await axios.get(
+          "http://localhost:8000/api/v1/videos",
+          {
+            params: {
+              title: sectionTitle,
+              page: 1,
+              limit: 10,
+              sort: "createdAt",
+            },
+          }
+        );
+        console.log("API Response:", response.data);
         let videos = response.data.data || [];
         if (videos.length === 0) throw new Error("No videos returned from API");
-  
-        videos.sort((a, b) => a.title.localeCompare(b.title)); // optional sort
+
+        videos.sort((a, b) => a.title.localeCompare(b.title));
         setFeaturedVideos(videos);
-  
-        // Start from first trailer (no manual title matching)
-        setCurrentFeaturedIndex(0);
+
+        const startIndex = videos.findIndex((video) =>
+          video.title.toLowerCase().includes("trailer1")
+        );
+        setCurrentFeaturedIndex(startIndex !== -1 ? startIndex : 0);
       } catch (err) {
         console.error("Error fetching featured videos:", err);
         setError("Failed to load videos. Please try again later.");
@@ -56,9 +61,8 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
         setIsLoading(false);
       }
     };
-  
     fetchVideos();
-  }, [sectionTitle]);  
+  }, [sectionTitle]);
 
   // Handle video playback on hover
   useEffect(() => {
