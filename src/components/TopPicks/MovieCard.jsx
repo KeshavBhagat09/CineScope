@@ -1,19 +1,55 @@
-import React from "react";
-import { useOutletContext } from "react-router-dom"; // Access watchlist state
-import RatingIcon from "../../assets/RatingIcon"; 
+import React, { useState } from "react";
+import { useOutletContext } from "react-router-dom";
+import axios from "axios";
+import RatingIcon from "../../assets/RatingIcon";
 
 const MovieCard = ({ title, posterSrc, rating, year, type }) => {
-  const { watchlist, setWatchlist } = useOutletContext(); // Get state from Root.jsx
+  const { watchlist, setWatchlist } = useOutletContext();
+  const [selectedRating, setSelectedRating] = useState(0); // ⭐ state to store selected rating
+  const [showRatingOptions, setShowRatingOptions] = useState(false);
 
   const handleAddToWatchlist = () => {
-    const movieData = { title, posterUrl: posterSrc, rating, year, type, watched: false };
+    const movieData = {
+      title,
+      posterUrl: posterSrc,
+      rating,
+      year,
+      type,
+      watched: false,
+    };
 
-    // Prevent duplicates
-    if (!watchlist.some(movie => movie.title === title)) {
+    if (!watchlist.some((movie) => movie.title === title)) {
       setWatchlist([...watchlist, movieData]);
       alert("Added to Watchlist! ✅");
     } else {
       alert("Already in Watchlist! ⚠️");
+    }
+  };
+
+  const submitRating = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/ratings",
+        {
+          movieTitle: title,
+          rating: selectedRating,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      alert("Rating submitted! ✅");
+      setShowRatingOptions(false);
+    } catch (error) {
+      console.error("Error submitting rating:", error.response?.data || error.message);
+      alert("Failed to submit rating.");
     }
   };
 
@@ -31,8 +67,33 @@ const MovieCard = ({ title, posterSrc, rating, year, type }) => {
 
       <div className="flex items-center justify-between mt-1 text-sm text-stone-300">
         <span>⭐ {rating}</span>
-        <RatingIcon className="w-6 h-6 text-white" />
+        <button
+          onClick={() => setShowRatingOptions(!showRatingOptions)}
+          className="text-yellow-400"
+        >
+          <RatingIcon className="w-6 h-6 text-white" />
+        </button>
       </div>
+
+      {showRatingOptions && (
+        <div className="flex space-x-1 mt-2">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              onClick={() => setSelectedRating(star)}
+              className={`text-xl ${selectedRating >= star ? "text-yellow-400" : "text-gray-400"}`}
+            >
+              ⭐
+            </button>
+          ))}
+          <button
+            onClick={submitRating}
+            className="ml-2 px-2 py-1 text-xs bg-green-500 hover:bg-green-600 text-white rounded"
+          >
+            Submit
+          </button>
+        </div>
+      )}
 
       <button
         onClick={handleAddToWatchlist}
