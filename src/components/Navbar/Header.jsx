@@ -61,7 +61,7 @@ export const Header = () => {
             <motion.a
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              href="#tvshows"
+              href="/shows"
               className="self-stretch px-2.5 py-2 my-auto transition-all duration-300 hover:text-yellow-400"
             >
               Shows

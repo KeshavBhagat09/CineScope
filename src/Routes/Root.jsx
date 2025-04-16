@@ -9,6 +9,7 @@ import Loader from "../components/UI/Loader.jsx";
 import Login from "../components/Navbar/Login.jsx";
 import Watchlist from "../components/Watchlist/Watchlist.jsx"; // Import Watchlist
 import Movies from "../components/Navbar/Movies.jsx";
+import Shows from "../Pages/Shows.jsx";
 
 const Page_Component = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -52,6 +53,7 @@ const router = createBrowserRouter(
     <Route element={<Page_Component />}>
       <Route path="/" element={<FeaturedMovies />} />
       <Route path="/movies" element={<Movies />} />
+      <Route path="/shows" element={<Shows />} />
       <Route path="/signup" element={<Signin />} />
       <Route path="/signin" element={<Login />} />
       <Route path="/watchlist" element={<Watchlist />} /> {/* Watchlist Route */}

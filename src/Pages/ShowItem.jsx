@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
-import RatingIcon from "../../assets/RatingIcon";
+import RatingIcon from "../assets/RatingIcon";
 
-const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, runtime }) => {
+const ShowItem = ({ title, posterSrc, rating, year, type, plot, actors, genre, runtime }) => {
   const { watchlist, setWatchlist } = useOutletContext();
   const [selectedRating, setSelectedRating] = useState(0);
   const [showRatingOptions, setShowRatingOptions] = useState(false);
@@ -11,7 +11,7 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
   const [reviewText, setReviewText] = useState("");
 
   const handleAddToWatchlist = () => {
-    const movieData = {
+    const showData = {
       title,
       posterUrl: posterSrc,
       rating,
@@ -20,8 +20,8 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
       watched: false,
     };
 
-    if (!watchlist.some((movie) => movie.title === title)) {
-      setWatchlist([...watchlist, movieData]);
+    if (!watchlist.some((item) => item.title === title)) {
+      setWatchlist([...watchlist, showData]);
       alert("Added to Watchlist! ✅");
     } else {
       alert("Already in Watchlist! ⚠️");
@@ -49,7 +49,7 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
       setShowRatingOptions(false);
     } catch (error) {
       console.error("Error submitting rating:", error.response?.data || error.message);
-      alert("Failed to submit rating.");
+      alert("Failed to submit rating: " + (error.response?.data?.message || error.message));
     }
   };
 
@@ -83,19 +83,26 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
     <>
       <div
         onClick={() => setShowModal(true)}
-        className="flex flex-col p-2 rounded-lg bg-neutral-700 bg-opacity-10 w-[160px] sm:w-[200px] md:w-[220px] lg:w-[250px] cursor-pointer hover:shadow-lg transition-shadow"
+        className="flex items-center p-4 bg-neutral-700 bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-all cursor-pointer"
       >
         <img
           loading="lazy"
           src={posterSrc}
-          className="rounded-md w-full h-[240px] sm:h-[280px] md:h-[320px] lg:h-[360px] object-cover"
-          alt={`Movie poster for ${title}`}
+          className="w-24 h-16 rounded-md object-cover mr-4"
+          alt={`Show poster for ${title}`}
         />
-        <div className="mt-2 text-lg font-semibold text-stone-300 truncate">
-          {title}
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold text-stone-300 truncate">{title}</h3>
+          <div className="flex items-center text-sm text-neutral-400 mt-1">
+            <span>{year}</span>
+            <span className="mx-2">•</span>
+            <span>{genre}</span>
+          </div>
+          <div className="flex items-center text-sm text-stone-300 mt-1">
+            <span>⭐ {rating}</span>
+          </div>
         </div>
-        <div className="flex items-center justify-between mt-1 text-sm text-stone-300">
-          <span>⭐ {rating}</span>
+        <div className="flex items-center space-x-2">
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -105,42 +112,43 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
           >
             <RatingIcon className="w-6 h-6 text-white" />
           </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAddToWatchlist();
+            }}
+            className="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold rounded-lg text-sm transition-all"
+          >
+            + Watchlist
+          </button>
         </div>
-        {showRatingOptions && (
-          <div className="flex space-x-1 mt-2">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedRating(star);
-                }}
-                className={`text-xl ${selectedRating >= star ? "text-yellow-400" : "text-gray-400"}`}
-              >
-                ⭐
-              </button>
-            ))}
+      </div>
+
+      {showRatingOptions && (
+        <div className="flex space-x-1 p-4 bg-neutral-700 bg-opacity-10 rounded-lg mt-2 ml-28">
+          {[1, 2, 3, 4, 5].map((star) => (
             <button
+              key={star}
               onClick={(e) => {
                 e.stopPropagation();
-                submitRating();
+                setSelectedRating(star);
               }}
-              className="ml-2 px-2 py-1 text-xs bg-green-500 hover:bg-green-600 text-white rounded"
+              className={`text-xl ${selectedRating >= star ? "text-yellow-400" : "text-gray-400"}`}
             >
-              Submit
+              ⭐
             </button>
-          </div>
-        )}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleAddToWatchlist();
-          }}
-          className="mt-2 px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold rounded-lg text-sm transition-all"
-        >
-          + Add to Watchlist
-        </button>
-      </div>
+          ))}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              submitRating();
+            }}
+            className="ml-2 px-2 py-1 text-xs bg-green-500 hover:bg-green-600 text-white rounded"
+          >
+            Submit
+          </button>
+        </div>
+      )}
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-start justify-center z-50 overflow-y-auto">
@@ -149,7 +157,7 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
               <img
                 src={posterSrc}
                 className="w-full h-64 sm:h-80 object-cover"
-                alt={`Movie poster for ${title}`}
+                alt={`Show poster for ${title}`}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/50 to-transparent"></div>
               <button
@@ -183,7 +191,7 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
                   onChange={(e) => setReviewText(e.target.value)}
                   className="w-full p-3 bg-neutral-800 text-white rounded-md border border-neutral-700 focus:outline-none focus:border-red-600"
                   rows="4"
-                  placeholder="Share your thoughts about the movie..."
+                  placeholder="Share your thoughts about the show..."
                 />
                 <button
                   onClick={submitReview}
@@ -201,4 +209,4 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
   );
 };
 
-export default MovieCard;
+export default ShowItem;
