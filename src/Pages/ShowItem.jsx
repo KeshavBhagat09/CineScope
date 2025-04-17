@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import RatingIcon from "../assets/RatingIcon";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ShowItem = ({ title, posterSrc, rating, year, type, plot, actors, genre, runtime }) => {
   const { watchlist, setWatchlist } = useOutletContext();
@@ -9,6 +10,45 @@ const ShowItem = ({ title, posterSrc, rating, year, type, plot, actors, genre, r
   const [showRatingOptions, setShowRatingOptions] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [reviewText, setReviewText] = useState("");
+  const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(false);
+  const [errorReviews, setErrorReviews] = useState(null);
+
+  // Normalize movieTitle to avoid mismatches
+  const normalizedTitle = title.trim().toLowerCase();
+
+  // Fetch reviews when modal opens
+  useEffect(() => {
+    if (showModal) {
+      const fetchReviews = async () => {
+        setLoadingReviews(true);
+        const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
+        console.log("Fetching reviews with token:", token ? "Present" : "Missing");
+        try {
+          const response = await axios.get("http://localhost:8000/api/v1/reviews/", {
+            params: { movieTitle: normalizedTitle, limit: 10, page: 1 },
+            headers: {
+              Authorization: token ? `Bearer ${token}` : undefined,
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          });
+          console.log("Reviews API response:", response.data);
+          setReviews(response.data.data?.reviews || response.data.reviews || []);
+          setLoadingReviews(false);
+        } catch (error) {
+          console.error("Error fetching reviews:", {
+            message: error.message,
+            response: error.response?.data,
+            status: error.response?.status,
+          });
+          setErrorReviews("Failed to load reviews. Please try again.");
+          setLoadingReviews(false);
+        }
+      };
+      fetchReviews();
+    }
+  }, [showModal, normalizedTitle]);
 
   const handleAddToWatchlist = () => {
     const showData = {
@@ -29,12 +69,16 @@ const ShowItem = ({ title, posterSrc, rating, year, type, plot, actors, genre, r
   };
 
   const submitRating = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Please log in to submit a rating.");
+      return;
+    }
     try {
       const res = await axios.post(
         "http://localhost:8000/api/v1/ratings",
         {
-          movieTitle: title,
+          movieTitle: normalizedTitle,
           rating: selectedRating,
         },
         {
@@ -54,13 +98,32 @@ const ShowItem = ({ title, posterSrc, rating, year, type, plot, actors, genre, r
   };
 
   const submitReview = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
+    console.log("Submitting review with token:", token ? "Present" : "Missing");
+    if (!token) {
+      alert("Please log in to submit a review.");
+      return;
+    }
     try {
+      // Optimistic update
+      const tempReview = {
+        _id: `temp-${Date.now()}`,
+        content: reviewText,
+        movieTitle: normalizedTitle,
+        owner: {
+          username: "You", // Replace with actual username from auth context if available
+          avatar: "https://via.placeholder.com/40",
+        },
+        createdAt: new Date().toISOString(),
+      };
+      setReviews([tempReview, ...reviews]);
+      setReviewText("");
+
       const res = await axios.post(
         "http://localhost:8000/api/v1/reviews/review",
         {
           content: reviewText,
-          movieTitle: title,
+          movieTitle: normalizedTitle,
         },
         {
           headers: {
@@ -70,12 +133,26 @@ const ShowItem = ({ title, posterSrc, rating, year, type, plot, actors, genre, r
           withCredentials: true,
         }
       );
-      alert("Review submitted! ✅");
-      setReviewText("");
-      setShowModal(false);
+      console.log("Review submission response:", res.data);
+      // Fetch updated reviews
+      const response = await axios.get("http://localhost:8000/api/v1/reviews/", {
+        params: { movieTitle: normalizedTitle, limit: 10, page: 1 },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      setReviews(response.data.data?.reviews || response.data.reviews || []);
     } catch (error) {
-      console.error("Error submitting review:", error.response?.data || error.message);
+      console.error("Error submitting review:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
       alert("Failed to submit review: " + (error.response?.data?.message || error.message));
+      // Revert optimistic update on error
+      setReviews(reviews.filter((r) => !r._id.startsWith("temp-")));
     }
   };
 
@@ -200,6 +277,48 @@ const ShowItem = ({ title, posterSrc, rating, year, type, plot, actors, genre, r
                 >
                   Submit Review
                 </button>
+              </div>
+              <div className="mt-6">
+                <h3 className="text-xl font-semibold mb-4">Reviews</h3>
+                {loadingReviews ? (
+                  <p className="text-neutral-400">Loading reviews...</p>
+                ) : errorReviews ? (
+                  <p className="text-red-600">{errorReviews}</p>
+                ) : reviews.length > 0 ? (
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    <AnimatePresence>
+                      {reviews.map((review) => (
+                        <motion.div
+                          key={review._id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -20 }}
+                          transition={{ duration: 0.3 }}
+                          className="flex items-start space-x-4 p-4 bg-neutral-800 rounded-md"
+                        >
+                          <img
+                            src={review.owner.avatar || "https://via.placeholder.com/40"}
+                            className="w-10 h-10 rounded-full object-cover"
+                            alt={`${review.owner.username}'s avatar`}
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-semibold text-stone-300">
+                                {review.owner.username}
+                              </span>
+                              <span className="text-xs text-neutral-400">
+                                {new Date(review.createdAt).toLocaleDateString()}
+                              </span>
+                            </div>
+                            <p className="text-neutral-300 mt-1">{review.content}</p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <p className="text-neutral-400">No reviews yet. Be the first to share!</p>
+                )}
               </div>
             </div>
           </div>
