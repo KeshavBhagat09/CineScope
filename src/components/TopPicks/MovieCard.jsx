@@ -11,7 +11,9 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
   const [showModal, setShowModal] = useState(false);
   const [reviewText, setReviewText] = useState("");
 
-  const handleAddToWatchlist = () => {
+  const handleAddToWatchlist = async () => {
+    const token = localStorage.getItem("token");
+  
     const movieData = {
       title,
       posterUrl: posterSrc,
@@ -20,14 +22,34 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
       type,
       watched: false,
     };
-
-    if (!watchlist.some((movie) => movie.title === title)) {
-      setWatchlist([...watchlist, movieData]);
-      alert("Added to Watchlist! ✅");
-    } else {
+  
+    // prevent adding duplicates in frontend
+    if (watchlist.some((movie) => movie.title === title)) {
       alert("Already in Watchlist! ⚠️");
+      return;
+    }
+  
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/watchlist/add",
+        movieData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+  
+      setWatchlist((prev) => [...prev, movieData]);
+      alert("Added to Watchlist! ✅");
+    } catch (error) {
+      console.error("❌ Error adding to DB:", error.response?.data || error.message);
+      alert("Failed to add to Watchlist.");
     }
   };
+  
 
   const submitRating = async () => {
     const token = localStorage.getItem("token");

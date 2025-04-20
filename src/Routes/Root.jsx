@@ -14,8 +14,12 @@ import Shows from "../Pages/Shows.jsx";
 const Page_Component = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
-  const hideLayoutRoutes = ["/login", "/register"];
-  const shouldShowLayout = !hideLayoutRoutes.includes(location.pathname);
+  
+  // Define routes where footer should be hidden
+  const hideLayoutRoutes = ["/signin", "/signup"];
+  
+  // Check if current route is in the list of routes that should not show the footer
+  const shouldShowFooter = !hideLayoutRoutes.includes(location.pathname);
 
   // ⏳ Watchlist State (Persistent)
   const [watchlist, setWatchlist] = useState(() => {
@@ -41,9 +45,9 @@ const Page_Component = ({ children }) => {
 
   return (
     <div>
-      {shouldShowLayout && <Header />}
+      <Header />
       <Outlet context={{ watchlist, setWatchlist }} /> 
-      {shouldShowLayout && <Footer />}
+      {shouldShowFooter && <Footer />}
     </div>
   );
 };
