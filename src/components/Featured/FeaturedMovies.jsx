@@ -157,8 +157,8 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
       style={{ background: backgroundGradient }}
     >
       {/* Featured Movie Section */}
-      <div className="relative w-full h-[80vh] flex items-end">
-        <div className="absolute inset-0 overflow-hidden">
+      <div className="relative w-full h-[92vh] md:h-[95vh] flex items-end">
+      <div className="absolute inset-0 overflow-hidden">
           {/* Show image if video has ended */}
           {videoEnded && (
             <img

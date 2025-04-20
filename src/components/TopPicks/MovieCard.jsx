@@ -154,7 +154,7 @@ const MovieCard = ({ title, posterSrc, rating, year, type, plot, actors, genre, 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black bg-opacity-75 flex items-start justify-center z-50 overflow-y-auto"
+            className="fixed inset-0 bg-black bg-opacity-75 flex items-start justify-center z-50 overflow-y-auto pt-16" // Added pt-16 to offset header height
           >
             <motion.div
               initial={{ opacity: 0, y: 50 }}

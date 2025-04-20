@@ -159,8 +159,8 @@ const Shows = () => {
   }
 
   return (
-    <div className="bg-neutral-900 min-h-screen p-6">
-      <h1 className="text-4xl font-bold text-white mb-8">TV Shows</h1>
+    <div className="bg-neutral-900 min-h-screen p-6 pt-32">
+      {/* <h1 className="text-4xl font-bold text-white mb-8">TV Shows</h1> */}
       {error && (
         <p className="text-red-600 text-lg mb-4 text-center">{error}</p>
       )}
