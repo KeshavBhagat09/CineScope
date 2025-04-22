@@ -8,7 +8,7 @@ import Reacher from "../../assets/Reacher.jpeg";
 import Strangers from "../../assets/Strangers.jpeg";
 import TheLastOfUs from "../../assets/TheLastOfUs.jpeg";
 import inside from "../../assets/inside.jpg";
-import BreakingBad from "../../assets/BreakingBad.jpg";
+import BreakingBad2 from "../../assets/BreakingBad2.jpg";
 import Dark from "../../assets/Dark.jpeg";
 import GameOfThrones2 from "../../assets/GameOfThrones2.jpg";
 import StreamingNow from "../../assets/StreamingNow.png";
@@ -18,6 +18,12 @@ import Social from "../../assets/SocialNetwork.jpeg";
 import LordOfTheRings from "../../assets/LordOfTheRings.jpeg";
 import StarWars from "../../assets/StarWars.jpeg";
 import GameOfThrones from "../../assets/GameOfThrones.jpg";
+import Office from "../../assets/Office.jpeg";
+import Ozark from "../../assets/Ozark.jpeg";
+import Fargo from "../../assets/Fargo.jpeg";
+import BlackMirror from "../../assets/BlackMirror.jpeg";
+import HandMaids from "../../assets/HandmaidTale.jpeg";
+import Kardashians from "../../assets/Kardashians.jpeg";
 
 
 // Dummy data for different platforms
@@ -35,22 +41,23 @@ const moviesByPlatform = {
     { title: "Loki", rating: "8.2", posterSrc: Loki },
     { title: "Inside out 2", rating: "7.9", posterSrc: inside },
     { title: "Starwars", rating: "9.0", posterSrc: StarWars },
-    { title: "Loki", rating: "8.2", posterSrc: Loki },
+    { title: "The Office", rating: "8.2", posterSrc: Office },
     { title: "Game of thrones", rating: "7.9", posterSrc: GameOfThrones },
   ],
   Netflix: [
-    { title: "Breaking Bad", rating: "8.7", posterSrc: BreakingBad },
+    { title: "Breaking Bad", rating: "8.7", posterSrc: BreakingBad2 },
     { title: "Dark", rating: "7.3", posterSrc: Dark },
     { title: "Stranger things", rating: "8.1", posterSrc: Strangers },
-    { title: "Breaking Bad", rating: "8.7", posterSrc: BreakingBad },
-    { title: "Dark", rating: "7.3", posterSrc: Dark },
-    { title: "Stranger things", rating: "8.1", posterSrc: Strangers },
+    { title: "Ozark", rating: "8.7", posterSrc: Ozark },
+    { title: "Fargo", rating: "7.3", posterSrc: Fargo },
+    { title: "Black Mirror", rating: "8.1", posterSrc: BlackMirror },
   ],
   "HBO Max": [
     { title: "Game of Thrones", rating: "9.3", posterSrc: GameOfThrones2 },
     { title: "The Last of Us", rating: "8.9", posterSrc: TheLastOfUs },
+    { title: "The Handmaid's Tale", rating: "9.3", posterSrc: HandMaids },
+    { title: "The Kardashians", rating: "8.9", posterSrc: Kardashians },
     { title: "Game of Thrones", rating: "9.3", posterSrc: GameOfThrones2 },
-    { title: "The Last of Us", rating: "8.9", posterSrc: TheLastOfUs },{ title: "Game of Thrones", rating: "9.3", posterSrc: GameOfThrones2 },
     { title: "The Last of Us", rating: "8.9", posterSrc: TheLastOfUs },
     { title: "Game of Thrones", rating: "9.3", posterSrc: GameOfThrones2 },
   ],
@@ -80,7 +87,7 @@ const TopPicks = () => {
   };
 
   return (
-    <div className="relative w-full flex flex-col items-start px-4 mb-12">
+    <div className="relative w-full flex flex-col items-start px-4 mb-24">
       {/* Background Image */}
       <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/3 w-[900px] sm:w-[1000px] md:w-[1100px] lg:w-[1200px] opacity-30 z-0">
         <img src={StreamingNow} alt="What to Watch" className="w-full" />

@@ -1,17 +1,15 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import login_image from "../../assets/BreakingBad.jpg";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import login_image from '../../assets/BreakingBad.jpg';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
-
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -25,34 +23,30 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-    setErrorMessage("");
+    setErrorMessage('');
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/users/login",
+        'http://localhost:8000/api/v1/users/login',
         {
           email: formData.email,
           password: formData.password,
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           withCredentials: true,
         }
       );
-      console.log("Response:", response.data);
-
-      // Store the token in localStorage (assuming the backend returns a token)
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+      if (response.data.data.accessToken) {
+        localStorage.setItem('token', response.data.data.accessToken);
       }
-
-      navigate("/");
+      navigate('/');
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
       setErrorMessage(
-        error.response?.data?.message || "Login failed, please try again."
+        error.response?.data?.message || 'Login failed, please try again.'
       );
     } finally {
       setIsLoading(false);
@@ -97,7 +91,9 @@ const Login = () => {
           <button
             type="submit"
             className={`font-['Amazon_Ember',Arial,sans-serif] opacity-100 w-full p-2 text-white rounded-[10px] hover:scale-105 transform transition-transform duration-200 ease-in-out overflow-visible mt-8 ${
-              isLoading ? "bg-green-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              isLoading
+                ? 'bg-green-400 cursor-not-allowed'
+                : 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500'
             }`}
             disabled={isLoading}
           >
@@ -126,13 +122,13 @@ const Login = () => {
                 Signing in...
               </span>
             ) : (
-              "Sign In"
+              'Sign In'
             )}
           </button>
         </form>
         <div className="mt-6 space-y-4 text-center">
           <p className="text-sm">
-            Don’t have an account?{" "}
+            Don’t have an account?{' '}
             <Link to="/signup" className="font-semibold hover:underline">
               Sign up
             </Link>

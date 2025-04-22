@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Logo from "../../assets/Logo.png";
 import WatchlistIcon from "../../assets/Watchlist.svg";
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentPage, setCurrentPage] = useState("home");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,10 +24,41 @@ export const Header = () => {
       else setCurrentPage(null);
     };
 
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/v1/users/current-user", {
+          withCredentials: true,
+        });
+        if (response.data.success) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        setIsAuthenticated(false);
+      }
+    };
+
     updateCurrentPage();
+    checkAuth();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [location]);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:8000/api/v1/users/logout",
+        {},
+        { withCredentials: true }
+      );
+      setIsAuthenticated(false);
+      localStorage.removeItem("token");
+      navigate("/signin"); // Changed from /login to /signin
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
   return (
     <header
@@ -94,7 +128,7 @@ export const Header = () => {
           </motion.a>
         </div>
 
-        {/* Right Side: Watchlist + Login */}
+        {/* Right Side: Watchlist + Login/Logout */}
         <div className="flex items-center gap-6 text-lg font-semibold pr-2">
           <Link
             to="/watchlist"
@@ -108,12 +142,21 @@ export const Header = () => {
             <span>Watchlist</span>
           </Link>
 
-          <Link
-            to="/signin"
-            className="px-4 py-1 border border-white rounded hover:bg-white/20 transition"
-          >
-            Login
-          </Link>
+          {isAuthenticated ? (
+            <button
+              onClick={handleLogout}
+              className="px-4 py-1  rounded hover:bg-red-600/20 hover:border-red-600 transition"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/signin" // Changed from /login to /signin
+              className="px-4 py-1  rounded hover:bg-white/20 transition"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </header>

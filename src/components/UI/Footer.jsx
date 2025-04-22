@@ -15,7 +15,7 @@ export const Footer = () => {
         <div className="flex flex-wrap justify-between gap-10 mt-16 max-md:mt-10 max-md:max-w-full">
           {/* Socials & Branding */}
           <div className="flex flex-col gap-4">
-            <h2 className="text-lg font-bold text-stone-300">Cinescope 🎬</h2>
+            <h2 className="text-lg font-bold text-stone-300">CiNESCOPE 🎬</h2>
             <p className="text-neutral-400 text-sm">
               Your ultimate destination for movie reviews, ratings, and all things cinema. Discover, rate, and share your love for movies with Cinescope!
             </p>

@@ -10,11 +10,9 @@ const Signup = () => {
     email: "",
     password: "",
     avatar: null,
-    // coverImage: null,
   });
 
   const [avatarName, setAvatarName] = useState("");
-  // const [coverImageName, setCoverImageName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,9 +29,6 @@ const Signup = () => {
     if (type === "file" && name === "avatar") {
       setAvatarName(files[0] ? files[0].name : "");
     }
-    // else if (type === "file" && name === "coverImage") {
-    //   setCoverImageName(files[0] ? files[0].name : "");
-    // }
   };
 
   const handleSubmit = async (event) => {
@@ -47,7 +42,6 @@ const Signup = () => {
     formDataToSend.append("email", formData.email);
     formDataToSend.append("password", formData.password);
     if (formData.avatar) formDataToSend.append("avatar", formData.avatar);
-    // if (formData.coverImage) formDataToSend.append("coverImage", formData.coverImage);
 
     try {
       const response = await axios.post(
@@ -57,15 +51,17 @@ const Signup = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true, // Added for consistency with login/logout
         }
       );
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+      if (response.data.data.accessToken) {
+        localStorage.setItem("token", response.data.data.accessToken);
       }
 
       navigate("/");
     } catch (error) {
+      console.error("Signup error:", error.response?.status, error.response?.data);
       setErrorMessage(
         error.response?.data?.message || "Signup failed, please try again."
       );
@@ -151,24 +147,6 @@ const Signup = () => {
               </div>
             </div>
           </div>
-          {/* Commented out Cover Image Upload */}
-          {/* <div className="relative">
-            <label className="block text-sm font-medium text-white/70 mb-1">Upload Cover Image</label>
-            <div className="relative">
-              <input
-                type="file"
-                name="coverImage"
-                onChange={handleChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                accept="image/*"
-                disabled={isLoading}
-              />
-              <div className="w-full h-12 px-4 bg-transparent border border-white/30 rounded-xl flex items-center text-white">
-                <span className="flex-1 truncate">{coverImageName || "Choose Cover Image"}</span>
-                <span className="text-white/70">🖼️</span>
-              </div>
-            </div>
-          </div> */}
           <button
             type="submit"
             className={`w-full py-3 text-white rounded-xl transition-all duration-200 ${
