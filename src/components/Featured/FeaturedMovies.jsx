@@ -25,6 +25,22 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     "../src/assets/interstellar2.jpeg",
   ];
 
+  const movieNames = [
+    "Breaking Bad",
+    "Game of Thrones",
+    "Avengers: Age of Ultron",
+    "Kung Fu Panda",
+    "Interstellar"
+  ];
+
+  const titleImages = [
+    "../src/assets/BBlogo.png",
+    "../src/assets/GOTlogo.png",
+    "../src/assets/AvengersEndgame.png",
+    "../src/assets/KungFuPanda.png",
+    "../src/assets/Interstellar.png",
+  ];
+
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -49,7 +65,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
         setFeaturedVideos(videos);
 
         const startIndex = videos.findIndex((video) =>
-          video.title.toLowerCase().includes("trailer1")
+          video.title.toLowerCase().includes(movieNames[0].toLowerCase())
         );
         setCurrentFeaturedIndex(startIndex !== -1 ? startIndex : 0);
       } catch (err) {
@@ -144,8 +160,10 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   const getVideoWithImage = (apiVideo, index) => {
     return {
       ...apiVideo,
+      title: movieNames[index % movieNames.length], // For alt text and metadata
       image: customFeaturedImages[index % customFeaturedImages.length],
       poster: customFeaturedImages[index % customFeaturedImages.length],
+      titleImage: titleImages[index % titleImages.length], // Add title image
     };
   };
 
@@ -251,18 +269,19 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
           </svg>
         </button>
 
-        {/* Overlay with Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
+        {/* Overlay with Reduced Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
 
         {/* Movie Details Overlay */}
         <div className="relative z-10 p-8 md:p-12 max-w-2xl text-white">
           <span className="text-blue-400 font-semibold">CiNESCOPE</span>
-          <h1
-            className="text-6xl font-bold mb-2 mt-2"
-            style={{ color: "#ff0000" }}
-          >
-            {currentVideo?.title.toUpperCase() || "MOVIE TITLE"}
-          </h1>
+          <div className="mb-2 mt-2">
+            <img
+              src={currentVideo?.titleImage || "/placeholder-title.png"}
+              alt={currentVideo?.title || "Movie Title"}
+              className="max-h-24 md:max-h-32 w-auto object-contain"
+            />
+          </div>
           <div className="text-sm mb-2">
             Hindi | Tamil | Telugu | Malayalam | Kannada
           </div>
