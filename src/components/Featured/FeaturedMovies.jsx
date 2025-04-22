@@ -14,14 +14,15 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [videoEnded, setVideoEnded] = useState(false);
-  const [isMuted, setIsMuted] = useState(true); // 🔧 added for mute/unmute
+  const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
 
   const customFeaturedImages = [
     "../src/assets/BreakingBad.jpg",
     "../src/assets/GameOfThrones.jpg",
-    "../src/assets/PeakyBlinders2.jpg",
-    "../src/assets/Spider.jpg",
+    "../src/assets/Avengers2.jpg",
+    "../src/assets/KungFuPanda.jpeg",
+    "../src/assets/interstellar2.jpeg",
   ];
 
   useEffect(() => {
@@ -29,14 +30,17 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
       try {
         setIsLoading(true);
         setError(null);
-        const response = await axios.get("http://localhost:8000/api/v1/videos", {
-          params: {
-            title: sectionTitle,
-            page: 1,
-            limit: 10,
-            sort: "createdAt",
-          },
-        });
+        const response = await axios.get(
+          "http://localhost:8000/api/v1/videos",
+          {
+            params: {
+              title: sectionTitle,
+              page: 1,
+              limit: 10,
+              sort: "createdAt",
+            },
+          }
+        );
 
         let videos = response.data.data || [];
         if (videos.length === 0) throw new Error("No videos returned from API");
@@ -157,6 +161,18 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     }
   };
 
+  const handleNext = () => {
+    setCurrentFeaturedIndex((prev) => (prev + 1) % featuredVideos.length);
+    setVideoEnded(false);
+  };
+
+  const handlePrev = () => {
+    setCurrentFeaturedIndex(
+      (prev) => (prev - 1 + featuredVideos.length) % featuredVideos.length
+    );
+    setVideoEnded(false);
+  };
+
   return (
     <div
       className="min-h-screen transition-all duration-500 relative"
@@ -193,13 +209,58 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
           </button>
         </div>
 
+        {/* ◀️ Previous Button */}
+        <button
+          onClick={handlePrev}
+          className="absolute top-1/2 left-4 transform -translate-y-1/2 z-20 hover:scale-105 transition-all duration-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-6 h-6 text-white"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        {/* ▶️ Next Button */}
+        <button
+          onClick={handleNext}
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 z-20 hover:scale-105 transition-all duration-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-6 h-6 text-white"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+
         {/* Overlay with Gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
 
         {/* Movie Details Overlay */}
         <div className="relative z-10 p-8 md:p-12 max-w-2xl text-white">
           <span className="text-blue-400 font-semibold">CiNESCOPE</span>
-          <h1 className="text-6xl font-bold mb-2 mt-2" style={{ color: "#ff0000" }}>
+          <h1
+            className="text-6xl font-bold mb-2 mt-2"
+            style={{ color: "#ff0000" }}
+          >
             {currentVideo?.title.toUpperCase() || "MOVIE TITLE"}
           </h1>
           <div className="text-sm mb-2">
