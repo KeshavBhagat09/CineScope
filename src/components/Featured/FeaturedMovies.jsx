@@ -14,6 +14,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [videoEnded, setVideoEnded] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // 🔧 added for mute/unmute
   const videoRef = useRef(null);
 
   const customFeaturedImages = [
@@ -57,12 +58,10 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     fetchVideos();
   }, [sectionTitle]);
 
-  // Reset videoEnded when index changes
   useEffect(() => {
     setVideoEnded(false);
   }, [currentFeaturedIndex]);
 
-  // Handle video end and move to next video after delay
   useEffect(() => {
     if (videoRef.current) {
       const handleVideoEnd = () => {
@@ -151,6 +150,13 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     currentFeaturedIndex
   );
 
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
     <div
       className="min-h-screen transition-all duration-500 relative"
@@ -158,27 +164,33 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
     >
       {/* Featured Movie Section */}
       <div className="relative w-full h-[92vh] md:h-[95vh] flex items-end">
-      <div className="absolute inset-0 overflow-hidden">
-          {/* Show image if video has ended */}
-          {videoEnded && (
+        <div className="absolute inset-0 overflow-hidden">
+          {videoEnded ? (
             <img
               src={currentVideo?.image || "/placeholder.jpg"}
               alt={currentVideo?.title || "Featured Movie"}
               className="w-full h-full object-cover"
             />
-          )}
-
-          {/* Autoplaying video */}
-          {!videoEnded && (
+          ) : (
             <video
               src={currentVideo?.videoUrl || "/placeholder.mp4"}
               ref={videoRef}
               autoPlay
-              muted
+              muted={isMuted}
               playsInline
               className="w-full h-full object-cover"
             />
           )}
+        </div>
+
+        {/* 🔧 Mute/Unmute Button */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
+          <button
+            onClick={toggleMute}
+            className="bg-black/60 text-white px-4 py-2 rounded-full backdrop-blur-sm hover:bg-black/80 transition"
+          >
+            {isMuted ? "Unmute 🔊" : "Mute 🔇"}
+          </button>
         </div>
 
         {/* Overlay with Gradient */}
@@ -196,7 +208,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
           <div className="text-green-400 mb-4">NEW ORIGINAL SERIES</div>
           <p className="text-gray-300 mb-6 line-clamp-3">
             {currentVideo?.description ||
-              "Seok, an eager yet genius neurosurgeon is reunited with Deokhee, the professor who ruined her long ago. Once, the two surgeons cared for each other more than anyone else. But now with the nothing..."}
+              "Seok, an eager yet genius neurosurgeon is reunited with Deokhee, the professor who ruined her long ago..."}
           </p>
           <div className="flex space-x-4">
             <button className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition">
