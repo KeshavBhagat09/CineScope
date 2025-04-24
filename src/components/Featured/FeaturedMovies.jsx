@@ -4,7 +4,7 @@ import TopPicks from "../TopPicks/TopPicks";
 import StreamingNow from "../StreamingNow/StreamingNow";
 import Watchlist from "../Watchlist/Watchlist";
 import { VideoData } from "../Data/VideoData.js"; // Import VideoData for images
-
+  
 const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   const [featuredVideos, setFeaturedVideos] = useState([]);
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
@@ -27,7 +27,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
 
   const movieNames = [
     "Breaking Bad",
-    "Game of Thrones",
+    "Game Of Thrones",
     "Avengers: Age of Ultron",
     "Kung Fu Panda",
     "Interstellar"
