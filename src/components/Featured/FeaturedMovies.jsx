@@ -5,6 +5,7 @@ import StreamingNow from "../StreamingNow/StreamingNow";
 import Watchlist from "../Watchlist/Watchlist";
 import { VideoData } from "../Data/VideoData.js"; // Import VideoData for images
   
+// eslint-disable-next-line react/prop-types
 const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
   const [featuredVideos, setFeaturedVideos] = useState([]);
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
@@ -19,8 +20,9 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
 
   const customFeaturedImages = [
     "../src/assets/BreakingBad.jpg",
-    "../src/assets/GameOfThrones.jpg",
+    "../src/assets/PeakyBlinders.jpg",
     "../src/assets/Avengers2.jpg",
+    "../src/assets/TokyoDrift.jpeg",
     "../src/assets/KungFuPanda.jpeg",
     "../src/assets/interstellar2.jpeg",
   ];
@@ -35,10 +37,11 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
 
   const titleImages = [
     "../src/assets/BBlogo.png",
-    "../src/assets/GOTlogo.png",
+    "../src/assets/PBlogo.png",
     "../src/assets/AvengersEndgame.png",
-    "../src/assets/KungFuPanda.png",
+    "../src/assets/TDlogo.png",
     "../src/assets/Interstellar.png",
+    "../src/assets/KungFuPanda.png",
   ];
 
   useEffect(() => {
@@ -68,6 +71,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
           video.title.toLowerCase().includes(movieNames[0].toLowerCase())
         );
         setCurrentFeaturedIndex(startIndex !== -1 ? startIndex : 0);
+      // eslint-disable-next-line no-unused-vars
       } catch (err) {
         setError("Failed to load videos. Please try again later.");
         setFeaturedVideos([]);
@@ -76,6 +80,7 @@ const FeaturedMovies = ({ sectionTitle = "trailer" }) => {
       }
     };
     fetchVideos();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionTitle]);
 
   useEffect(() => {

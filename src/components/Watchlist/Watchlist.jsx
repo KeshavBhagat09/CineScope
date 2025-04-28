@@ -74,7 +74,7 @@ const Watchlist = () => {
             onClick={() => handleRemove(item.title)}
             className="mt-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg text-sm transition-all"
           >
-            Remove
+            Remove From Watchlist
           </button>
         </div>
       ))
